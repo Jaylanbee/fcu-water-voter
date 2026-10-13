@@ -952,8 +952,10 @@
     // 👑 解鎖老師 1234 名次評審面板
     function grantTeacherPrivileges() {
       isTeacherDevice = true;
-      document.getElementById('teacherAuthBar').style.display = 'flex';
-      document.getElementById('teacherRankingCard').style.display = 'block';
+      const authBar = document.getElementById('teacherAuthBar');
+      const rankCard = document.getElementById('teacherRankingCard');
+      if (authBar) authBar.style.display = 'flex';
+      if (rankCard) rankCard.style.display = 'block';
 
       // 載入已儲存的名次
       const savedRanks = localStorage.getItem('teacher_ranks_06');
@@ -964,10 +966,13 @@
           if (sel) sel.value = teacherRankings[i-1];
         }
       }
+
+      // 自動平滑滾動回頂端，確保老師第一眼看到金色面板
+      window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
     function promptManualTeacherAuth() {
-      const email = prompt("請輸入指導教授授權之 Google 帳號：");
+      const email = prompt("請輸入指導教授授權之 Google 帳號：", "madduxbee@gmail.com");
       if (email && email.trim().toLowerCase() === AUTHORIZED_TEACHER_EMAIL.toLowerCase()) {
         localStorage.setItem('teacher_auth_email_06', AUTHORIZED_TEACHER_EMAIL);
         grantTeacherPrivileges();
