@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>水水臺灣 第06講 國家水資源緊急應變會議 ‧ 雙票即時投票機 (Google Sites 嵌入版)</title>
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --primary: #0f2b5c;
+      --secondary: #1e40af;
+      --accent: #dc2626;
+      --bg: #f8fafc;
+      --card-bg: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --gold: #b45309;
+      --gold-bg: #fffbeb;
+      --gold-border: #fde68a;
+      --silver: #475569;
+      --success: #16a34a;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Microsoft JhengHei", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: linear-gradient(135deg, var(--primary), #1e3a8a);
+      color: white;
+      padding: 18px 16px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+
+    .badge {
+      display: inline-block;
+      background-color: var(--accent);
+      color: white;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 3px 10px;
+      border-radius: 9999px;
+      letter-spacing: 1px;
+      margin-bottom: 4px;
+    }
+
+    h1 {
+      font-size: 21px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .subtitle {
+      font-size: 13px;
+      opacity: 0.9;
+    }
+
+    .nav-tabs {
+      display: flex;
+      justify-content: center;
+      background: white;
+      border-bottom: 1px solid var(--border);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    .nav-btn {
+      flex: 1;
+      max-width: 260px;
+      padding: 12px 14px;
+      border: none;
+      background: none;
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 3px solid transparent;
+      transition: all 0.2s;
+    }
+
+    .nav-btn.active {
+      color: var(--primary);
+      border-bottom-color: var(--primary);
+      background-color: #f1f5f9;
+    }
+
+    main {
+      flex: 1;
+      max-width: 860px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 24px 16px;
+    }
+
+    .view-panel {
+      display: none;
+    }
+
+    .view-panel.active {
+      display: block;
+    }
+
+    .qrcode-hero-card {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 20px;
+      text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+      margin-bottom: 20px;
+    }
+
+    .qrcode-hero-title {
+      font-size: 24px;
+      font-weight: 800;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+
+    .qrcode-hero-subtitle {
+      font-size: 15px;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+    }
+
+    .qrcode-box-container {
+      display: inline-flex;
+      padding: 18px;
+      background: white;
+      border: 3px solid var(--primary);
+      border-radius: 20px;
+      box-shadow: 0 8px 24px rgba(15, 43, 92, 0.12);
+      margin-bottom: 20px;
+    }
+
+    #qrcodeBox img, #qrcodeBox canvas {
+      display: block;
+      margin: 0 auto;
+    }
+
+    .hero-stat-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .stat-badge {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      color: #1e40af;
+      padding: 8px 18px;
+      border-radius: 30px;
+      font-weight: 700;
+      font-size: 15px;
+    }
+
+    .btn-hero-action {
+      background: var(--accent);
+      color: white;
+      border: none;
+      padding: 14px 28px;
+      font-size: 16px;
+      font-weight: 800;
+      border-radius: 12px;
+      cursor: pointer;
+      box-shadow: 0 4px 14px rgba(220, 38, 38, 0.25);
+      transition: all 0.2s;
+    }
+
+    .btn-hero-action:hover {
+      background: #b91c1c;
+      transform: translateY(-2px);
+    }
+
+    .url-customize-box {
+      margin-top: 20px;
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .url-customize-box input {
+      padding: 6px 10px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      width: 280px;
+      font-size: 12px;
+    }
+
+    .teacher-auth-bar {
+      display: none;
+      background: var(--gold-bg);
+      border: 1px solid var(--gold-border);
+      color: #92400e;
+      padding: 10px 14px;
+      border-radius: 10px;
+      margin-bottom: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .rule-box {
+      background: #eff6ff;
+      border: 1px solid #bfdbfe;
+      border-radius: 12px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      font-size: 13px;
+    }
+
+    .rule-box h3 {
+      color: #1e40af;
+      margin-bottom: 4px;
+      font-size: 14px;
+    }
+
+    .ip-indicator {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f1f5f9;
+      padding: 8px 12px;
+      border-radius: 8px;
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-bottom: 14px;
+      border: 1px solid var(--border);
+    }
+
+    .selection-counter {
+      text-align: center;
+      font-size: 16px;
+      font-weight: 800;
+      margin-bottom: 16px;
+      color: var(--primary);
+    }
+
+    .selection-counter span {
+      display: inline-block;
+      background: var(--primary);
+      color: white;
+      padding: 2px 10px;
+      border-radius: 12px;
+      margin: 0 4px;
+    }
+
+    .grid-options {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    @media (min-width: 640px) {
+      .grid-options {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .vote-card {
+      background: white;
+      border: 2px solid var(--border);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+      user-select: none;
+    }
+
+    .vote-card:hover {
+      border-color: #93c5fd;
+      transform: translateY(-2px);
+    }
+
+    .vote-card.selected {
+      border-color: var(--secondary);
+      background-color: #eff6ff;
+      box-shadow: 0 4px 12px rgba(30, 64, 175, 0.12);
+    }
+
+    .vote-card.locked {
+      pointer-events: none;
+      opacity: 0.6;
+    }
+
+    .team-tag {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 2px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-bottom: 8px;
+    }
+
+    .team-1 .team-tag { background: #fee2e2; color: #991b1b; }
+    .team-2 .team-tag { background: #fef3c7; color: #92400e; }
+    .team-3 .team-tag { background: #e0e7ff; color: #3730a3; }
+    .team-4 .team-tag { background: #dcfce7; color: #166534; }
+
+    .vote-card h2 {
+      font-size: 17px;
+      margin-bottom: 4px;
+    }
+
+    .vote-card p {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    .check-icon {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: transparent;
+      font-size: 13px;
+      font-weight: bold;
+    }
+
+    .vote-card.selected .check-icon {
+      background: var(--secondary);
+      border-color: var(--secondary);
+      color: white;
+    }
+
+    .btn-submit {
+      width: 100%;
+      background: var(--secondary);
+      color: white;
+      border: none;
+      padding: 15px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 12px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .btn-submit:disabled {
+      background: #cbd5e1;
+      cursor: not-allowed;
+    }
+
+    .lock-banner {
+      display: none;
+      background: #fef2f2;
+      border: 1px solid #fecaca;
+      color: #991b1b;
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 700;
+      margin-bottom: 14px;
+      font-size: 13px;
+    }
+
+    .teacher-panel {
+      display: none;
+      margin-top: 24px;
+      background: #fffbeb;
+      border: 2px solid #fde68a;
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 4px 12px rgba(180, 83, 9, 0.08);
+    }
+
+    .teacher-panel-title {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--gold);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .teacher-score-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    @media (min-width: 640px) {
+      .teacher-score-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    .t-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: white;
+      padding: 8px 12px;
+      border-radius: 8px;
+      border: 1px solid #fef3c7;
+    }
+
+    .t-row label {
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .t-row input {
+      width: 70px;
+      padding: 6px;
+      border: 1px solid #cbd5e1;
+      border-radius: 6px;
+      font-size: 15px;
+      font-weight: 700;
+      text-align: center;
+    }
+
+    .btn-gold {
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: white;
+      border: none;
+      padding: 12px;
+      width: 100%;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .manual-auth-link {
+      text-align: center;
+      margin-top: 20px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    .manual-auth-link a {
+      color: #64748b;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
+    .dashboard-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .results-container {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .result-row {
+      background: white;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 16px 18px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+
+    .result-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+
+    .result-title {
+      font-size: 16px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .result-meta {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--primary);
+      text-align: right;
+    }
+
+    .progress-bar-bg {
+      background: #f1f5f9;
+      height: 22px;
+      border-radius: 11px;
+      overflow: hidden;
+      margin-top: 6px;
+    }
+
+    .progress-bar-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 11px;
+      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .team-1 .progress-bar-fill { background: linear-gradient(90deg, #ef4444, #dc2626); }
+    .team-2 .progress-bar-fill { background: linear-gradient(90deg, #f59e0b, #d97706); }
+    .team-3 .progress-bar-fill { background: linear-gradient(90deg, #3b82f6, #1d4ed8); }
+    .team-4 .progress-bar-fill { background: linear-gradient(90deg, #10b981, #059669); }
+
+    .formula-tag {
+      font-size: 12px;
+      color: var(--text-muted);
+      margin-top: 4px;
+    }
+
+    .award-badge {
+      font-size: 12px;
+      padding: 2px 8px;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+    .award-1 { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
+    .award-2 { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
+
+    .modal {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0,0,0,0.6);
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 20px;
+    }
+    .modal.active { display: flex; }
+    .modal-box {
+      background: white;
+      border-radius: 16px;
+      padding: 26px;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+    }
+    .modal-box h2 { font-size: 19px; color: var(--primary); margin-bottom: 8px; }
+    .modal-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <div class="badge">逢甲大學通識講堂《水水臺灣》第 06 講</div>
+    <h1>國家水資源緊急應變會議 ‧ 雙票即時投票系統 (Google Sites 嵌入版)</h1>
+    <div class="subtitle">大螢幕掃碼投影首頁 ✕ 手機雙票投票 ✕ 50/50 綜合加權總榜</div>
+  </header>
+
+  <nav class="nav-tabs" id="navBar">
+    <button class="nav-btn active" id="btnTabQr" onclick="switchView('qrView')">📺 大螢幕投影首頁 (QR Code)</button>
+    <button class="nav-btn" id="btnTabVote" onclick="switchView('voteView')">📱 手機端投票介面</button>
+    <button class="nav-btn" id="btnTabScreen" onclick="switchView('screenView')">📊 綜合開票總榜 (50/50)</button>
+  </nav>
+
+  <main>
+    <!-- 視圖一：大螢幕首頁 QR Code -->
+    <div id="qrView" class="view-panel active">
+      <div class="qrcode-hero-card">
+        <div class="qrcode-hero-title">📲 請全體決策代表拿起手機掃描投票</div>
+        <div class="qrcode-hero-subtitle">每位代表【強制投 2 票】（支持本組 1 票 ＋ 客觀認同 1 票） ‧ 手機 IP 唯一防重複</div>
+
+        <div class="qrcode-box-container">
+          <div id="qrcodeBox"></div>
+        </div>
+
+        <div class="hero-stat-row">
+          <div class="stat-badge">👥 已完成投票：<strong id="liveVoterCount" style="font-size: 18px;">0</strong> 人</div>
+          <div class="stat-badge">🗳️ 累計總票數：<strong id="liveTotalVotes" style="font-size: 18px;">0</strong> 票</div>
+        </div>
+
+        <div>
+          <button class="btn-hero-action" onclick="switchView('screenView')">🎬 投票結束 ➔ 揭曉 50/50 綜合開票總榜</button>
+        </div>
+
+        <div class="url-customize-box">
+          <span>QR Code 指向網址：</span>
+          <input type="text" id="targetUrlInput" onchange="regenerateQrCode()" placeholder="預設為當前網址">
+          <button style="padding: 4px 8px; border-radius: 4px; border: 1px solid #cbd5e1; cursor: pointer;" onclick="regenerateQrCode()">更新 QR</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 視圖二：手機端投票選項 -->
+    <div id="voteView" class="view-panel">
+      <div id="teacherAuthBar" class="teacher-auth-bar" style="display: none;">
+        <span>👑 已成功識別指導教授：<strong>畢嵐杰 博士 (madduxbee@gmail.com)</strong></span>
+        <span style="font-size: 11px; background: #fde68a; padding: 2px 6px; border-radius: 4px;">教席已解鎖</span>
+      </div>
+
+      <div id="lockBanner" class="lock-banner">
+        ⚠️ 系統偵測到此手機/網路 IP 已完成投票！為維護全班公平性，無法重複投票。
+      </div>
+
+      <div class="rule-box">
+        <h3>💡 投票規則與防弊限制：</h3>
+        <p>1. <strong>【一個人一定要投兩票】</strong>：請勾選 2 個組別（支持自組 1 票 ＋ 客觀認同 1 票；選 1 票或 3 票以上無法送出）。</p>
+        <p>2. <strong>【手機 IP 唯一防重複】</strong>：每部手機與 IP 僅限送出一次，送出後自動鎖定！</p>
+        <p>3. <strong>【50/50 雙軌配分】</strong>：最終總分 = (學生得票率% × 0.50) + (老師專業評分 × 0.50)。</p>
+      </div>
+
+      <div class="ip-indicator">
+        <span>🌐 當前設備與 IP：<strong id="clientIpDisplay">查詢中...</strong></span>
+        <span id="ipStatusBadge" style="color: var(--success); font-weight: bold;">● 具備投票資格</span>
+      </div>
+
+      <div class="selection-counter">
+        目前已勾選：<span id="selectCount">0</span> / 2 票
+      </div>
+
+      <div class="grid-options">
+        <div class="vote-card team-1" onclick="toggleSelection(1)">
+          <div class="team-tag">左前展台 ‧ 經濟命脈</div>
+          <div class="check-icon" id="check-1">✓</div>
+          <h2>【保產業組】</h2>
+          <p>4.06 兆產值 ✕ 18.2MΩ 超純水極限標準 ✕ 自費包水車承諾</p>
+        </div>
+
+        <div class="vote-card team-2" onclick="toggleSelection(2)">
+          <div class="team-tag">右前展台 ‧ 土地正義</div>
+          <div class="check-icon" id="check-2">✓</div>
+          <h2>【保農業組】</h2>
+          <p>水利法第 18 條法定優先權 ✕ 7.4 萬公頃休耕 ✕ 停灌補償直撥佃農</p>
+        </div>
+
+        <div class="vote-card team-3" onclick="toggleSelection(3)">
+          <div class="team-tag">左後展台 ‧ 生存底線</div>
+          <div class="check-icon" id="check-3">✓</div>
+          <h2>【顧民生組】</h2>
+          <p>WHO 250L 生存人權 ✕ 拒絕供五停二負壓爆管 ✕ 智慧夜間降壓</p>
+        </div>
+
+        <div class="vote-card team-4" onclick="toggleSelection(4)">
+          <div class="team-tag">右後展台 ‧ 大自然主權</div>
+          <div class="check-icon" id="check-4">✓</div>
+          <h2>【顧生態組】</h2>
+          <p>Tennant 10% 河川生態基流 ✕ 嚴禁深水井抽水 ✕ 防範高鐵地層下陷</p>
+        </div>
+      </div>
+
+      <button id="btnSubmit" class="btn-submit" disabled onclick="submitVote()">確認送出 2 票（完成即鎖定）</button>
+
+      <div id="teacherPanel" class="teacher-panel">
+        <div class="teacher-panel-title">
+          <span>👨‍🏫 指導教授 畢嵐杰博士 ‧ 專業評審面板 (佔 50%)</span>
+        </div>
+        <p style="font-size: 12px; color: #92400e; margin-bottom: 12px;">
+          請老師為四組金字塔海報與答辯評分（0~100 分），系統將自動在背景進行 50/50 加權精算：
+        </p>
+
+        <div class="teacher-score-grid">
+          <div class="t-row">
+            <label>【保產業組】：</label>
+            <input type="number" id="tScore1" value="85" min="0" max="100">
+          </div>
+          <div class="t-row">
+            <label>【保農業組】：</label>
+            <input type="number" id="tScore2" value="85" min="0" max="100">
+          </div>
+          <div class="t-row">
+            <label>【顧民生組】：</label>
+            <input type="number" id="tScore3" value="85" min="0" max="100">
+          </div>
+          <div class="t-row">
+            <label>【顧生態組】：</label>
+            <input type="number" id="tScore4" value="85" min="0" max="100">
+          </div>
+        </div>
+
+        <button class="btn-gold" onclick="saveTeacherScores()">💾 儲存老師評分並背景自動加權</button>
+      </div>
+
+      <div class="manual-auth-link">
+        <a onclick="promptManualTeacherAuth()">[老師手動解鎖入口]</a>
+      </div>
+    </div>
+
+    <!-- 視圖三：大螢幕開票總榜 -->
+    <div id="screenView" class="view-panel">
+      <div class="dashboard-header">
+        <h2>📊 綜合大開票儀表板（學生50% ✕ 老師50%）</h2>
+        <div style="display: flex; gap: 8px;">
+          <button class="btn-submit" style="padding: 6px 14px; font-size: 13px; width: auto;" onclick="switchView('qrView')">⬅️ 返回 QR Code 首頁</button>
+        </div>
+      </div>
+
+      <div class="results-container">
+        <div class="result-row team-1">
+          <div class="result-info">
+            <div class="result-title">
+              <span>【保產業組】</span>
+              <span id="badge-1"></span>
+            </div>
+            <div class="result-meta" id="score-summary-1">總分：0.0 分</div>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="bar-1"></div>
+          </div>
+          <div class="formula-tag" id="detail-1">
+            學生得票：0 票 (0%) ➔ 學生分 0.0 (佔50%) + 老師分 0.0 (佔50%)
+          </div>
+        </div>
+
+        <div class="result-row team-2">
+          <div class="result-info">
+            <div class="result-title">
+              <span>【保農業組】</span>
+              <span id="badge-2"></span>
+            </div>
+            <div class="result-meta" id="score-summary-2">總分：0.0 分</div>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="bar-2"></div>
+          </div>
+          <div class="formula-tag" id="detail-2">
+            學生得票：0 票 (0%) ➔ 學生分 0.0 (佔50%) + 老師分 0.0 (佔50%)
+          </div>
+        </div>
+
+        <div class="result-row team-3">
+          <div class="result-info">
+            <div class="result-title">
+              <span>【顧民生組】</span>
+              <span id="badge-3"></span>
+            </div>
+            <div class="result-meta" id="score-summary-3">總分：0.0 分</div>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="bar-3"></div>
+          </div>
+          <div class="formula-tag" id="detail-3">
+            學生得票：0 票 (0%) ➔ 學生分 0.0 (佔50%) + 老師分 0.0 (佔50%)
+          </div>
+        </div>
+
+        <div class="result-row team-4">
+          <div class="result-info">
+            <div class="result-title">
+              <span>【顧生態組】</span>
+              <span id="badge-4"></span>
+            </div>
+            <div class="result-meta" id="score-summary-4">總分：0.0 分</div>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="bar-4"></div>
+          </div>
+          <div class="formula-tag" id="detail-4">
+            學生得票：0 票 (0%) ➔ 學生分 0.0 (佔50%) + 老師分 0.0 (佔50%)
+          </div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
+        <button class="btn-submit" style="max-width: 240px; padding: 12px;" onclick="calculateCompositeScores()">🎬 即時刷新 / 動態大開票</button>
+        <button class="btn-submit" style="max-width: 240px; padding: 12px; background: #64748b;" onclick="addMockVotes()">➕ 模擬 35 人投票 (測試)</button>
+        <button class="btn-submit" style="max-width: 180px; padding: 12px; background: var(--accent);" onclick="resetAllData()">🔄 一鍵重置</button>
+      </div>
+    </div>
+  </main>
+
+  <div id="successModal" class="modal">
+    <div class="modal-box">
+      <h2>🎉 投票成功完成！</h2>
+      <p>您的 2 票與手機特徵已成功計入總指揮部！此設備已鎖定，無法重複送出。請抬頭觀看大螢幕即時開票！</p>
+      <button class="btn-submit" onclick="closeModal('successModal')">確認關閉</button>
+    </div>
+  </div>
+
+  <script>
+    const AUTHORIZED_TEACHER_EMAIL = "madduxbee@gmail.com";
+
+    let studentVotes = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    let teacherScores = { 1: 85, 2: 85, 3: 85, 4: 85 };
+    let totalVoters = 0;
+    let selectedTeams = new Set();
+    let currentClientIp = "127.0.0.1";
+    let votedIps = new Set();
+    let deviceFingerprint = "";
+    let isTeacherDevice = false;
+    let qrInstance = null;
+
+    function initDefaultViewRouting() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+      const modeParam = urlParams.get('mode') || urlParams.get('view');
+
+      if (modeParam === 'vote' || (isMobile && modeParam !== 'host')) {
+        switchView('voteView');
+      } else {
+        switchView('qrView');
+      }
+    }
+
+    function renderHeroQrCode() {
+      const qrContainer = document.getElementById('qrcodeBox');
+      qrContainer.innerHTML = '';
+
+      // 優先偵測 Google Sites 上層真實公開網址 (document.referrer)
+      let parentUrl = document.referrer ? document.referrer.split('#')[0].split('?')[0] : '';
+      let currentHref = parentUrl || window.location.href.split('#')[0].split('?')[0];
+      let targetVoteUrl = currentHref + '?mode=vote';
+
+      const customInput = document.getElementById('targetUrlInput');
+      if (customInput && customInput.value.trim() !== '') {
+        targetVoteUrl = customInput.value.trim();
+      } else if (customInput) {
+        customInput.value = targetVoteUrl;
+      }
+
+      qrInstance = new QRCode(qrContainer, {
+        text: targetVoteUrl,
+        width: 260,
+        height: 260,
+        colorDark: "#0f2b5c",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+    }
+
+    function regenerateQrCode() {
+      renderHeroQrCode();
+    }
+
+    function switchView(viewId) {
+      document.querySelectorAll('.view-panel').forEach(el => el.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(el => el.classList.remove('active'));
+
+      document.getElementById(viewId).classList.add('active');
+
+      if (viewId === 'qrView') {
+        document.getElementById('btnTabQr').classList.add('active');
+        renderHeroQrCode();
+      } else if (viewId === 'voteView') {
+        document.getElementById('btnTabVote').classList.add('active');
+      } else if (viewId === 'screenView') {
+        document.getElementById('btnTabScreen').classList.add('active');
+        calculateCompositeScores();
+      }
+    }
+
+    function checkGoogleAccountAuth() {
+      const cachedAuth = localStorage.getItem('teacher_auth_email_06');
+      if (cachedAuth === AUTHORIZED_TEACHER_EMAIL) {
+        grantTeacherPrivileges();
+        return;
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const emailParam = urlParams.get('email');
+      if (emailParam && emailParam.toLowerCase() === AUTHORIZED_TEACHER_EMAIL.toLowerCase()) {
+        localStorage.setItem('teacher_auth_email_06', AUTHORIZED_TEACHER_EMAIL);
+        grantTeacherPrivileges();
+        return;
+      }
+
+      if (window.google && google.accounts) {
+        try {
+          google.accounts.id.initialize({
+            client_id: "FCU-WATER-VOTER.apps.googleusercontent.com",
+            callback: handleGoogleCredentialResponse,
+            auto_select: true
+          });
+          google.accounts.id.prompt();
+        } catch (e) {}
+      }
+    }
+
+    function handleGoogleCredentialResponse(response) {
+      try {
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        if (payload.email && payload.email.toLowerCase() === AUTHORIZED_TEACHER_EMAIL.toLowerCase()) {
+          localStorage.setItem('teacher_auth_email_06', AUTHORIZED_TEACHER_EMAIL);
+          grantTeacherPrivileges();
+        }
+      } catch (e) {}
+    }
+
+    function grantTeacherPrivileges() {
+      isTeacherDevice = true;
+      document.getElementById('teacherAuthBar').style.display = 'flex';
+      document.getElementById('teacherPanel').style.display = 'block';
+      for (let i = 1; i <= 4; i++) {
+        if (document.getElementById(`tScore${i}`)) {
+          document.getElementById(`tScore${i}`).value = teacherScores[i] || 85;
+        }
+      }
+    }
+
+    function promptManualTeacherAuth() {
+      const email = prompt("請輸入指導教授授權之 Google 帳號：");
+      if (email && email.trim().toLowerCase() === AUTHORIZED_TEACHER_EMAIL.toLowerCase()) {
+        localStorage.setItem('teacher_auth_email_06', AUTHORIZED_TEACHER_EMAIL);
+        grantTeacherPrivileges();
+        alert("✅ 身分核驗成功！已成功綁定畢博士教席權限！");
+      } else if (email) {
+        alert("❌ 帳號不符，無法開啟教師評審面板。");
+      }
+    }
+
+    function initFingerprintAndIp() {
+      let fp = localStorage.getItem('device_fp_06');
+      if (!fp) {
+        fp = 'DEV_' + Math.random().toString(36).substring(2, 10) + '_' + Date.now();
+        localStorage.setItem('device_fp_06', fp);
+      }
+      deviceFingerprint = fp;
+
+      fetch('https://api.ipify.org?format=json')
+        .then(res => res.json())
+        .then(data => {
+          currentClientIp = data.ip;
+          document.getElementById('clientIpDisplay').innerText = data.ip;
+          checkVoterEligibility();
+        })
+        .catch(() => {
+          currentClientIp = "FCU-DEV-" + fp.substring(4, 10);
+          document.getElementById('clientIpDisplay').innerText = currentClientIp;
+          checkVoterEligibility();
+        });
+    }
+
+    function checkVoterEligibility() {
+      const savedVotedIps = localStorage.getItem('voted_ips_06');
+      if (savedVotedIps) {
+        votedIps = new Set(JSON.parse(savedVotedIps));
+      }
+
+      const hasVotedLocal = localStorage.getItem('has_voted_06');
+      const isIpVoted = votedIps.has(currentClientIp) || votedIps.has(deviceFingerprint);
+
+      if ((hasVotedLocal || isIpVoted) && !isTeacherDevice) {
+        lockVotingUI();
+      }
+    }
+
+    function lockVotingUI() {
+      document.getElementById('lockBanner').style.display = 'block';
+      document.getElementById('ipStatusBadge').style.color = 'var(--accent)';
+      document.getElementById('ipStatusBadge').innerText = '● 已完成投票 (已鎖定)';
+      document.getElementById('btnSubmit').disabled = true;
+      document.getElementById('btnSubmit').innerText = '✓ 此設備/IP 已完成投票';
+      document.querySelectorAll('.vote-card').forEach(c => c.classList.add('locked'));
+    }
+
+    function toggleSelection(teamId) {
+      const hasVotedLocal = localStorage.getItem('has_voted_06');
+      if ((hasVotedLocal || votedIps.has(currentClientIp) || votedIps.has(deviceFingerprint)) && !isTeacherDevice) {
+        alert("此手機/網路 IP 已完成投票，無法更改！");
+        return;
+      }
+
+      const card = document.querySelector(`.vote-card.team-${teamId}`);
+      if (selectedTeams.has(teamId)) {
+        selectedTeams.delete(teamId);
+        card.classList.remove('selected');
+      } else {
+        if (selectedTeams.size >= 2) {
+          alert("【限制：一人必須且只能投兩票】請先取消一個已選項目！");
+          return;
+        }
+        selectedTeams.add(teamId);
+        card.classList.add('selected');
+      }
+
+      document.getElementById('selectCount').innerText = selectedTeams.size;
+      const btn = document.getElementById('btnSubmit');
+      btn.disabled = (selectedTeams.size !== 2);
+    }
+
+    function submitVote() {
+      if (selectedTeams.size !== 2) {
+        alert("必須且只能勾選 2 個組別！");
+        return;
+      }
+
+      selectedTeams.forEach(id => {
+        studentVotes[id] = (studentVotes[id] || 0) + 1;
+      });
+      totalVoters += 1;
+
+      if (!isTeacherDevice) {
+        votedIps.add(currentClientIp);
+        votedIps.add(deviceFingerprint);
+        localStorage.setItem('has_voted_06', 'true');
+        localStorage.setItem('voted_ips_06', JSON.stringify(Array.from(votedIps)));
+        lockVotingUI();
+      }
+
+      saveData();
+      updateLiveStats();
+      document.getElementById('successModal').classList.add('active');
+      calculateCompositeScores();
+    }
+
+    function saveTeacherScores() {
+      for (let i = 1; i <= 4; i++) {
+        const val = parseFloat(document.getElementById(`tScore${i}`).value) || 0;
+        teacherScores[i] = Math.min(100, Math.max(0, val));
+      }
+      saveData();
+      calculateCompositeScores();
+      alert("✅ 畢博士專業評分已成功儲存！背景已自動完成 50% 學生 + 50% 老師加權精算！");
+    }
+
+    function closeModal(modalId) {
+      document.getElementById(modalId).classList.remove('active');
+    }
+
+    function updateLiveStats() {
+      const totalVotes = studentVotes[1] + studentVotes[2] + studentVotes[3] + studentVotes[4];
+      document.getElementById('liveVoterCount').innerText = totalVoters;
+      document.getElementById('liveTotalVotes').innerText = totalVotes;
+    }
+
+    function calculateCompositeScores() {
+      updateLiveStats();
+      const totalVotes = studentVotes[1] + studentVotes[2] + studentVotes[3] + studentVotes[4];
+
+      let compositeScores = {};
+      for (let i = 1; i <= 4; i++) {
+        const sVotes = studentVotes[i];
+        const studentPct = totalVotes > 0 ? (sVotes / totalVotes) * 100 : 0;
+        const studentWeighted = studentPct * 0.50;
+        const tScore = parseFloat(teacherScores[i]) || 0;
+        const teacherWeighted = tScore * 0.50;
+        const finalScore = studentWeighted + teacherWeighted;
+
+        compositeScores[i] = {
+          final: finalScore.toFixed(1),
+          studentPct: studentPct.toFixed(1),
+          sVotes: sVotes,
+          tScore: tScore.toFixed(0),
+          sWeighted: studentWeighted.toFixed(1),
+          tWeighted: teacherWeighted.toFixed(1)
+        };
+      }
+
+      const sortedTeams = [1, 2, 3, 4].sort((a, b) => parseFloat(compositeScores[b].final) - parseFloat(compositeScores[a].final));
+      const maxScore = Math.max(...Object.values(compositeScores).map(c => parseFloat(c.final))) || 1;
+
+      for (let i = 1; i <= 4; i++) {
+        const data = compositeScores[i];
+        document.getElementById(`score-summary-${i}`).innerText = `綜合總分：${data.final} 分`;
+        document.getElementById(`detail-${i}`).innerText = 
+          `學生得票：${data.sVotes} 票 (${data.studentPct}%) ➔ 學生分 ${data.sWeighted} (佔50%) + 老師分 ${data.tWeighted} (佔50%，評分${data.tScore})`;
+
+        const barWidth = maxScore > 0 ? (parseFloat(data.final) / maxScore) * 100 : 0;
+        document.getElementById(`bar-${i}`).style.width = `${barWidth}%`;
+
+        const badgeEl = document.getElementById(`badge-${i}`);
+        badgeEl.innerHTML = '';
+        if (totalVotes > 0 || Object.values(teacherScores).some(s => s > 0)) {
+          if (i === sortedTeams[0]) {
+            badgeEl.innerHTML = '<span class="award-badge award-1">🥇 冠軍組 (第一名 ‧ 三選一特權)</span>';
+          } else if (i === sortedTeams[1]) {
+            badgeEl.innerHTML = '<span class="award-badge award-2">🥈 亞軍組 (第二名 ‧ 加3分)</span>';
+          }
+        }
+      }
+    }
+
+    function addMockVotes() {
+      for (let p = 0; p < 35; p++) {
+        const arr = [1, 2, 3, 4].sort(() => Math.random() - 0.5);
+        studentVotes[arr[0]] += 1;
+        studentVotes[arr[1]] += 1;
+        totalVoters += 1;
+      }
+      saveData();
+      calculateCompositeScores();
+      alert("已模擬 35 位同學投票（共投出 70 票）！");
+    }
+
+    function resetAllData() {
+      if (confirm("確定要重置所有投票、IP 紀錄與老師分數嗎？")) {
+        studentVotes = { 1: 0, 2: 0, 3: 0, 4: 0 };
+        teacherScores = { 1: 85, 2: 85, 3: 85, 4: 85 };
+        totalVoters = 0;
+        votedIps.clear();
+        selectedTeams.clear();
+        localStorage.removeItem('student_votes_06');
+        localStorage.removeItem('teacher_scores_06');
+        localStorage.removeItem('total_voters_06');
+        localStorage.removeItem('has_voted_06');
+        localStorage.removeItem('voted_ips_06');
+
+        document.getElementById('lockBanner').style.display = 'none';
+        document.querySelectorAll('.vote-card').forEach(c => c.classList.remove('selected', 'locked'));
+        document.getElementById('selectCount').innerText = "0";
+        document.getElementById('btnSubmit').disabled = true;
+        document.getElementById('btnSubmit').innerText = "確認送出 2 票（完成即鎖定）";
+        document.getElementById('ipStatusBadge').style.color = 'var(--success)';
+        document.getElementById('ipStatusBadge').innerText = '● 具備投票資格';
+
+        saveData();
+        calculateCompositeScores();
+      }
+    }
+
+    function saveData() {
+      localStorage.setItem('student_votes_06', JSON.stringify(studentVotes));
+      localStorage.setItem('teacher_scores_06', JSON.stringify(teacherScores));
+      localStorage.setItem('total_voters_06', totalVoters.toString());
+    }
+
+    function loadSavedData() {
+      const sv = localStorage.getItem('student_votes_06');
+      const ts = localStorage.getItem('teacher_scores_06');
+      const tv = localStorage.getItem('total_voters_06');
+      if (sv) studentVotes = JSON.parse(sv);
+      if (ts) teacherScores = JSON.parse(ts);
+      if (tv) totalVoters = parseInt(tv);
+
+      for (let i = 1; i <= 4; i++) {
+        if (document.getElementById(`tScore${i}`)) {
+          document.getElementById(`tScore${i}`).value = teacherScores[i] || 85;
+        }
+      }
+      updateLiveStats();
+      calculateCompositeScores();
+    }
+
+    window.onload = function() {
+      checkGoogleAccountAuth();
+      initFingerprintAndIp();
+      loadSavedData();
+      initDefaultViewRouting();
+    };
+  </script>
+</body>
+</html>
