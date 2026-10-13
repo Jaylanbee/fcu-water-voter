@@ -589,15 +589,14 @@
 <body>
 
   <header>
-    <div class="badge">逢甲大學通識講堂《水水臺灣》第 06 講</div>
-    <h1>國家水資源緊急應變會議 ‧ 雙票即時投票系統</h1>
-    <div class="subtitle">大螢幕掃碼投影首頁 ✕ 學生強制雙票 ✕ 畢博士 1234 名次評審 (50/50)</div>
+    <div class="badge">逢甲大學通識講堂《水水臺灣》</div>
+    <h1>國家水資源緊急應變會議 ‧ 即時投票系統</h1>
   </header>
 
   <nav class="nav-tabs" id="navBar">
-    <button class="nav-btn active" id="btnTabQr" onclick="switchView('qrView')">📺 大螢幕投影首頁 (QR Code)</button>
-    <button class="nav-btn" id="btnTabVote" onclick="switchView('voteView')">📱 手機端投票 / 評審介面</button>
-    <button class="nav-btn" id="btnTabScreen" onclick="switchView('screenView')">📊 綜合開票總榜 (50/50)</button>
+    <button class="nav-btn active" id="btnTabQr" onclick="switchView('qrView')">📺 大螢幕投影 (QR Code)</button>
+    <button class="nav-btn" id="btnTabVote" onclick="switchView('voteView')">📱 手機端投票 / 評審</button>
+    <button class="nav-btn" id="btnTabScreen" onclick="switchView('screenView')">📊 綜合開票總榜</button>
   </nav>
 
   <main>
@@ -606,8 +605,8 @@
          ======================================================== -->
     <div id="qrView" class="view-panel active">
       <div class="qrcode-hero-card">
-        <div class="qrcode-hero-title">📲 請全體決策代表拿起手機掃描投票</div>
-        <div class="qrcode-hero-subtitle">學生強制投 2 票（支持自組 1 票 ＋ 客觀認同 1 票） ‧ 老師專屬排定 1~4 名</div>
+        <div class="qrcode-hero-title">請各組代表掃描 QR Code 進行投票</div>
+        <div class="qrcode-hero-subtitle">每人應投 2 票 ‧ 點擊即時計票</div>
 
         <div class="qrcode-box-container">
           <div id="qrcodeBox"></div>
@@ -620,7 +619,7 @@
         </div>
 
         <div>
-          <button class="btn-hero-action" onclick="switchView('screenView')">🎬 投票結束 ➔ 揭曉 50/50 綜合開票總榜</button>
+          <button class="btn-hero-action" onclick="switchView('screenView')">🎬 揭曉綜合開票總榜</button>
         </div>
       </div>
     </div>
