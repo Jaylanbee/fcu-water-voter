@@ -589,8 +589,8 @@
 <body>
 
   <header>
-    <div class="badge">逢甲大學通識講堂《水水臺灣》</div>
-    <h1>國家水資源緊急應變會議 ‧ 即時投票系統</h1>
+    <div class="badge" onclick="triggerTeacherAuthSecret()" style="cursor: pointer;" title="">逢甲大學通識講堂《水水臺灣》</div>
+    <h1 onclick="triggerTeacherAuthSecret()" style="cursor: pointer;">國家水資源緊急應變會議 ‧ 即時投票系統</h1>
   </header>
 
   <nav class="nav-tabs" id="navBar">
@@ -740,10 +740,6 @@
         </div>
 
         <button id="btnSubmit" class="btn-submit" disabled onclick="submitVote()">確認送出 2 票（完成即鎖定）</button>
-      </div>
-
-      <div class="manual-auth-link">
-        <a onclick="promptManualTeacherAuth()">[老師專屬身分檢核入口]</a>
       </div>
     </div>
 
@@ -910,23 +906,29 @@
       }
     }
 
-    // 檢查老師身分
+    // 嚴格 if-then-else 身分分流判斷
     function checkGoogleAccountAuth() {
+      // 1. 先確認是否已是驗證過的老師
       const cachedAuth = localStorage.getItem('teacher_auth_email_06');
-      if (cachedAuth === AUTHORIZED_TEACHER_EMAIL) {
-        grantTeacherPrivileges();
-        return;
-      }
-
       const urlParams = new URLSearchParams(window.location.search);
       const emailParam = urlParams.get('email');
-      if (emailParam && emailParam.toLowerCase() === AUTHORIZED_TEACHER_EMAIL.toLowerCase()) {
+
+      // IF 是老師 (帳號符合唯一白名單 madduxbee@gmail.com)
+      if (cachedAuth === AUTHORIZED_TEACHER_EMAIL || (emailParam && emailParam.toLowerCase() === AUTHORIZED_TEACHER_EMAIL.toLowerCase())) {
         localStorage.setItem('teacher_auth_email_06', AUTHORIZED_TEACHER_EMAIL);
         grantTeacherPrivileges();
-        return;
+      } 
+      // ELSE 其他所有人皆為學生，保持純淨學生投票介面
+      else {
+        isTeacherDevice = false;
+        const authBar = document.getElementById('teacherAuthBar');
+        const rankCard = document.getElementById('teacherRankingCard');
+        if (authBar) authBar.style.display = 'none';
+        if (rankCard) rankCard.style.display = 'none';
       }
 
-      if (window.google && google.accounts) {
+      // Google 智慧單一登入輔助偵測
+      if (window.google && google.accounts && !isTeacherDevice) {
         try {
           google.accounts.id.initialize({
             client_id: "FCU-WATER-VOTER.apps.googleusercontent.com",
@@ -941,10 +943,12 @@
     function handleGoogleCredentialResponse(response) {
       try {
         const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        // IF 是老師
         if (payload.email && payload.email.toLowerCase() === AUTHORIZED_TEACHER_EMAIL.toLowerCase()) {
           localStorage.setItem('teacher_auth_email_06', AUTHORIZED_TEACHER_EMAIL);
           grantTeacherPrivileges();
         }
+        // ELSE 學生保持原樣
       } catch (e) {}
     }
 
@@ -966,18 +970,31 @@
         }
       }
 
-      // 自動平滑滾動回頂端，確保老師第一眼看到金色面板
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
-    function promptManualTeacherAuth() {
-      const email = prompt("請輸入指導教授授權之 Google 帳號：", "madduxbee@gmail.com");
-      if (email && email.trim().toLowerCase() === AUTHORIZED_TEACHER_EMAIL.toLowerCase()) {
-        localStorage.setItem('teacher_auth_email_06', AUTHORIZED_TEACHER_EMAIL);
-        grantTeacherPrivileges();
-        alert("✅ 身分核驗成功！已成功解鎖畢博士 1234 名次評審面板！");
-      } else if (email) {
-        alert("❌ 帳號不符，無法開啟教師評審席。");
+    // 點擊頂部標題之專屬隱形驗證入口 (只有老師自己知道)
+    let secretClickCount = 0;
+    let secretTimer = null;
+    function triggerTeacherAuthSecret() {
+      secretClickCount++;
+      clearTimeout(secretTimer);
+      secretTimer = setTimeout(() => { secretClickCount = 0; }, 2000);
+
+      // 連續點擊 2 次標題或點擊按鈕，即執行身分比對
+      if (secretClickCount >= 2 || isTeacherDevice) {
+        secretClickCount = 0;
+        const email = prompt("【指導教授身分驗證】請輸入 Google 帳號：", "madduxbee@gmail.com");
+        // IF 是老師
+        if (email && email.trim().toLowerCase() === AUTHORIZED_TEACHER_EMAIL.toLowerCase()) {
+          localStorage.setItem('teacher_auth_email_06', AUTHORIZED_TEACHER_EMAIL);
+          grantTeacherPrivileges();
+          alert("✅ 驗證成功：指導教授 畢嵐杰博士！\n專屬 1234 名次評審面板已解鎖！");
+        } 
+        // ELSE 不是老師
+        else if (email) {
+          alert("⚠️ 帳號不符！此為學生投票介面。");
+        }
       }
     }
 
