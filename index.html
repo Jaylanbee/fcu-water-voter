@@ -615,7 +615,7 @@
         <div class="hero-stat-row">
           <div class="stat-badge">👥 已完成投票：<strong id="liveVoterCount" style="font-size: 18px;">0</strong> 人</div>
           <div class="stat-badge">🗳️ 累計總票數：<strong id="liveTotalVotes" style="font-size: 18px;">0</strong> 票</div>
-          <div class="stat-badge" id="teacherStatusBadge">👨‍🏫 老師名次審定：<strong style="color: #d97706;">待評定</strong></div>
+          <div class="stat-badge" id="teacherStatusBadge" onclick="showTeacherQrModal()" style="cursor: pointer;" title="點擊開啟老師專屬通道">👨‍🏫 老師名次審定：<strong style="color: #d97706;">待評定 ⚙️</strong></div>
         </div>
 
         <div>
@@ -837,6 +837,16 @@
     </div>
   </div>
 
+  <!-- 👑 老師專屬直通 QR Code 彈窗 -->
+  <div id="teacherQrModal" class="modal">
+    <div class="modal-box" style="border: 3px solid var(--gold);">
+      <h2 style="color: #b45309;">👑 指導教授 1234 名次評審席</h2>
+      <p style="font-size: 13px; color: #78350f; margin-bottom: 14px;">請畢博士拿 iPhone 掃描此專屬條碼，一秒直通解鎖名次排序面板：</p>
+      <div id="teacherQrcodeContainer" style="display: flex; justify-content: center; margin-bottom: 16px;"></div>
+      <button class="btn-submit" style="background: #b45309;" onclick="closeModal('teacherQrModal')">關閉視窗</button>
+    </div>
+  </div>
+
   <script>
     // 👑 授權之唯一指導教授帳號
     const AUTHORIZED_TEACHER_EMAIL = "madduxbee@gmail.com";
@@ -887,6 +897,33 @@
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
       });
+    }
+
+    function showTeacherQrModal() {
+      const modal = document.getElementById('teacherQrModal');
+      const container = document.getElementById('teacherQrcodeContainer');
+      if (!modal || !container) return;
+      container.innerHTML = '';
+
+      let parentUrl = document.referrer ? document.referrer.split('#')[0].split('?')[0] : '';
+      let currentHref = parentUrl || window.location.href.split('#')[0].split('?')[0];
+      let teacherDirectUrl = currentHref + '?mode=vote&email=' + encodeURIComponent(AUTHORIZED_TEACHER_EMAIL);
+
+      new QRCode(container, {
+        text: teacherDirectUrl,
+        width: 200,
+        height: 200,
+        colorDark: "#92400e",
+        colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.H
+      });
+
+      modal.classList.add('active');
+    }
+
+    function closeModal(modalId) {
+      const modal = document.getElementById(modalId);
+      if (modal) modal.classList.remove('active');
     }
 
     function switchView(viewId) {
