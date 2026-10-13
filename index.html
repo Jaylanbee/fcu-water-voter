@@ -3,8 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>水水臺灣 第06講 國家水資源緊急應變會議 ‧ 雙票即時投票機 (Google Sites 嵌入版)</title>
+  <title>水水臺灣 第06講 國家水資源緊急應變會議 ‧ 雙票即時投票機</title>
+  <!-- 引入 Google Identity 官方 SDK -->
   <script src="https://accounts.google.com/gsi/client" async defer></script>
+  <!-- 引入純前端 QR Code 生成庫 -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
     :root {
@@ -116,6 +118,9 @@
       display: block;
     }
 
+    /* ========================================================
+       【視圖一：大螢幕首頁 ‧ 超大 QR CODE 投影視圖】
+       ======================================================== */
     .qrcode-hero-card {
       background: white;
       border: 1px solid var(--border);
@@ -190,33 +195,112 @@
       transform: translateY(-2px);
     }
 
-    .url-customize-box {
-      margin-top: 20px;
-      font-size: 12px;
-      color: var(--text-muted);
-    }
-
-    .url-customize-box input {
-      padding: 6px 10px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      width: 280px;
-      font-size: 12px;
-    }
-
+    /* ========================================================
+       【視圖二：手機端視圖 (學生投票 / 老師專屬名次排序)】
+       ======================================================== */
     .teacher-auth-bar {
       display: none;
       background: var(--gold-bg);
       border: 1px solid var(--gold-border);
       color: #92400e;
-      padding: 10px 14px;
-      border-radius: 10px;
-      margin-bottom: 14px;
-      font-size: 13px;
+      padding: 12px 16px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      font-size: 14px;
       font-weight: 700;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(180, 83, 9, 0.08);
+    }
+
+    /* 👑 畢博士專屬「1、2、3、4 名次排序評審席」 */
+    .teacher-ranking-card {
+      display: none;
+      background: linear-gradient(135deg, #fffbeb, #fef3c7);
+      border: 2px solid #f59e0b;
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 6px 16px rgba(217, 119, 6, 0.12);
+    }
+
+    .ranking-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #b45309;
+      font-size: 17px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .ranking-desc {
+      font-size: 13px;
+      color: #92400e;
+      margin-bottom: 16px;
+      line-height: 1.4;
+    }
+
+    .rank-slot-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin-bottom: 18px;
+    }
+
+    .rank-slot-item {
+      background: white;
+      border: 1px solid #fde68a;
+      border-radius: 12px;
+      padding: 12px 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+    }
+
+    .rank-slot-label {
+      font-size: 15px;
+      font-weight: 800;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 110px;
+    }
+
+    .rank-slot-select {
+      flex: 1;
+      padding: 10px 12px;
+      font-size: 15px;
+      font-weight: 700;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      background: #f8fafc;
+      color: var(--primary);
+      outline: none;
+    }
+
+    .rank-slot-select:focus {
+      border-color: var(--gold);
+      background: white;
+    }
+
+    .btn-gold-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #d97706, #b45309);
+      color: white;
+      border: none;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 800;
+      border-radius: 10px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(180, 83, 9, 0.2);
+    }
+
+    /* 學生投票區塊 */
+    .student-voting-section {
+      /* 正常顯示給學生 */
     }
 
     .rule-box {
@@ -381,79 +465,9 @@
       font-size: 13px;
     }
 
-    .teacher-panel {
-      display: none;
-      margin-top: 24px;
-      background: #fffbeb;
-      border: 2px solid #fde68a;
-      border-radius: 14px;
-      padding: 18px;
-      box-shadow: 0 4px 12px rgba(180, 83, 9, 0.08);
-    }
-
-    .teacher-panel-title {
-      font-size: 16px;
-      font-weight: 800;
-      color: var(--gold);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 8px;
-    }
-
-    .teacher-score-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 10px;
-      margin-bottom: 14px;
-    }
-
-    @media (min-width: 640px) {
-      .teacher-score-grid {
-        grid-template-columns: 1fr 1fr;
-      }
-    }
-
-    .t-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: white;
-      padding: 8px 12px;
-      border-radius: 8px;
-      border: 1px solid #fef3c7;
-    }
-
-    .t-row label {
-      font-size: 13px;
-      font-weight: 700;
-    }
-
-    .t-row input {
-      width: 70px;
-      padding: 6px;
-      border: 1px solid #cbd5e1;
-      border-radius: 6px;
-      font-size: 15px;
-      font-weight: 700;
-      text-align: center;
-    }
-
-    .btn-gold {
-      background: linear-gradient(135deg, #d97706, #b45309);
-      color: white;
-      border: none;
-      padding: 12px;
-      width: 100%;
-      border-radius: 8px;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-    }
-
     .manual-auth-link {
       text-align: center;
-      margin-top: 20px;
+      margin-top: 24px;
       font-size: 12px;
       color: #94a3b8;
     }
@@ -463,6 +477,9 @@
       cursor: pointer;
     }
 
+    /* ========================================================
+       【視圖三：大螢幕開票總榜視圖】
+       ======================================================== */
     .dashboard-header {
       display: flex;
       justify-content: space-between;
@@ -544,6 +561,7 @@
     .award-1 { background: #fef3c7; color: #b45309; border: 1px solid #fde68a; }
     .award-2 { background: #f1f5f9; color: #475569; border: 1px solid #cbd5e1; }
 
+    /* 彈窗 */
     .modal {
       display: none;
       position: fixed;
@@ -572,22 +590,24 @@
 
   <header>
     <div class="badge">逢甲大學通識講堂《水水臺灣》第 06 講</div>
-    <h1>國家水資源緊急應變會議 ‧ 雙票即時投票系統 (Google Sites 嵌入版)</h1>
-    <div class="subtitle">大螢幕掃碼投影首頁 ✕ 手機雙票投票 ✕ 50/50 綜合加權總榜</div>
+    <h1>國家水資源緊急應變會議 ‧ 雙票即時投票系統</h1>
+    <div class="subtitle">大螢幕掃碼投影首頁 ✕ 學生強制雙票 ✕ 畢博士 1234 名次評審 (50/50)</div>
   </header>
 
   <nav class="nav-tabs" id="navBar">
     <button class="nav-btn active" id="btnTabQr" onclick="switchView('qrView')">📺 大螢幕投影首頁 (QR Code)</button>
-    <button class="nav-btn" id="btnTabVote" onclick="switchView('voteView')">📱 手機端投票介面</button>
+    <button class="nav-btn" id="btnTabVote" onclick="switchView('voteView')">📱 手機端投票 / 評審介面</button>
     <button class="nav-btn" id="btnTabScreen" onclick="switchView('screenView')">📊 綜合開票總榜 (50/50)</button>
   </nav>
 
   <main>
-    <!-- 視圖一：大螢幕首頁 QR Code -->
+    <!-- ========================================================
+         【視圖一：大螢幕首頁 ‧ 掃描 QR Code 視圖】
+         ======================================================== -->
     <div id="qrView" class="view-panel active">
       <div class="qrcode-hero-card">
         <div class="qrcode-hero-title">📲 請全體決策代表拿起手機掃描投票</div>
-        <div class="qrcode-hero-subtitle">每位代表【強制投 2 票】（支持本組 1 票 ＋ 客觀認同 1 票） ‧ 手機 IP 唯一防重複</div>
+        <div class="qrcode-hero-subtitle">學生強制投 2 票（支持自組 1 票 ＋ 客觀認同 1 票） ‧ 老師專屬排定 1~4 名</div>
 
         <div class="qrcode-box-container">
           <div id="qrcodeBox"></div>
@@ -596,115 +616,141 @@
         <div class="hero-stat-row">
           <div class="stat-badge">👥 已完成投票：<strong id="liveVoterCount" style="font-size: 18px;">0</strong> 人</div>
           <div class="stat-badge">🗳️ 累計總票數：<strong id="liveTotalVotes" style="font-size: 18px;">0</strong> 票</div>
+          <div class="stat-badge" id="teacherStatusBadge">👨‍🏫 老師名次審定：<strong style="color: #d97706;">待評定</strong></div>
         </div>
 
         <div>
           <button class="btn-hero-action" onclick="switchView('screenView')">🎬 投票結束 ➔ 揭曉 50/50 綜合開票總榜</button>
         </div>
-
-        <div class="url-customize-box">
-          <span>QR Code 指向網址：</span>
-          <input type="text" id="targetUrlInput" onchange="regenerateQrCode()" placeholder="預設為當前網址">
-          <button style="padding: 4px 8px; border-radius: 4px; border: 1px solid #cbd5e1; cursor: pointer;" onclick="regenerateQrCode()">更新 QR</button>
-        </div>
       </div>
     </div>
 
-    <!-- 視圖二：手機端投票選項 -->
+    <!-- ========================================================
+         【視圖二：手機端視圖 (學生投票 / 老師專屬 1234 名次)】
+         ======================================================== -->
     <div id="voteView" class="view-panel">
-      <div id="teacherAuthBar" class="teacher-auth-bar" style="display: none;">
+      <!-- 👑 畢博士身分標籤 (老師專屬) -->
+      <div id="teacherAuthBar" class="teacher-auth-bar">
         <span>👑 已成功識別指導教授：<strong>畢嵐杰 博士 (madduxbee@gmail.com)</strong></span>
-        <span style="font-size: 11px; background: #fde68a; padding: 2px 6px; border-radius: 4px;">教席已解鎖</span>
+        <span style="font-size: 11px; background: #fde68a; padding: 2px 6px; border-radius: 4px; color: #b45309;">評審席已解鎖</span>
       </div>
 
-      <div id="lockBanner" class="lock-banner">
-        ⚠️ 系統偵測到此手機/網路 IP 已完成投票！為維護全班公平性，無法重複投票。
-      </div>
-
-      <div class="rule-box">
-        <h3>💡 投票規則與防弊限制：</h3>
-        <p>1. <strong>【一個人一定要投兩票】</strong>：請勾選 2 個組別（支持自組 1 票 ＋ 客觀認同 1 票；選 1 票或 3 票以上無法送出）。</p>
-        <p>2. <strong>【手機 IP 唯一防重複】</strong>：每部手機與 IP 僅限送出一次，送出後自動鎖定！</p>
-        <p>3. <strong>【50/50 雙軌配分】</strong>：最終總分 = (學生得票率% × 0.50) + (老師專業評分 × 0.50)。</p>
-      </div>
-
-      <div class="ip-indicator">
-        <span>🌐 當前設備與 IP：<strong id="clientIpDisplay">查詢中...</strong></span>
-        <span id="ipStatusBadge" style="color: var(--success); font-weight: bold;">● 具備投票資格</span>
-      </div>
-
-      <div class="selection-counter">
-        目前已勾選：<span id="selectCount">0</span> / 2 票
-      </div>
-
-      <div class="grid-options">
-        <div class="vote-card team-1" onclick="toggleSelection(1)">
-          <div class="team-tag">左前展台 ‧ 經濟命脈</div>
-          <div class="check-icon" id="check-1">✓</div>
-          <h2>【保產業組】</h2>
-          <p>4.06 兆產值 ✕ 18.2MΩ 超純水極限標準 ✕ 自費包水車承諾</p>
+      <!-- 👑 畢博士專屬「1、2、3、4 名次排序評審席」 -->
+      <div id="teacherRankingCard" class="teacher-ranking-card">
+        <div class="ranking-header">
+          <span>👨‍🏫 指導教授 畢嵐杰博士 ‧ 專業名次評定席 (佔 50%)</span>
         </div>
-
-        <div class="vote-card team-2" onclick="toggleSelection(2)">
-          <div class="team-tag">右前展台 ‧ 土地正義</div>
-          <div class="check-icon" id="check-2">✓</div>
-          <h2>【保農業組】</h2>
-          <p>水利法第 18 條法定優先權 ✕ 7.4 萬公頃休耕 ✕ 停灌補償直撥佃農</p>
-        </div>
-
-        <div class="vote-card team-3" onclick="toggleSelection(3)">
-          <div class="team-tag">左後展台 ‧ 生存底線</div>
-          <div class="check-icon" id="check-3">✓</div>
-          <h2>【顧民生組】</h2>
-          <p>WHO 250L 生存人權 ✕ 拒絕供五停二負壓爆管 ✕ 智慧夜間降壓</p>
-        </div>
-
-        <div class="vote-card team-4" onclick="toggleSelection(4)">
-          <div class="team-tag">右後展台 ‧ 大自然主權</div>
-          <div class="check-icon" id="check-4">✓</div>
-          <h2>【顧生態組】</h2>
-          <p>Tennant 10% 河川生態基流 ✕ 嚴禁深水井抽水 ✕ 防範高鐵地層下陷</p>
-        </div>
-      </div>
-
-      <button id="btnSubmit" class="btn-submit" disabled onclick="submitVote()">確認送出 2 票（完成即鎖定）</button>
-
-      <div id="teacherPanel" class="teacher-panel">
-        <div class="teacher-panel-title">
-          <span>👨‍🏫 指導教授 畢嵐杰博士 ‧ 專業評審面板 (佔 50%)</span>
-        </div>
-        <p style="font-size: 12px; color: #92400e; margin-bottom: 12px;">
-          請老師為四組金字塔海報與答辯評分（0~100 分），系統將自動在背景進行 50/50 加權精算：
+        <p class="ranking-desc">
+          老師無須計算複雜分數！請依據四大陣營之白板麥肯錫海報結構、現場申論與交互詰問表現，直接選出您心目中的 1、2、3、4 名：
         </p>
 
-        <div class="teacher-score-grid">
-          <div class="t-row">
-            <label>【保產業組】：</label>
-            <input type="number" id="tScore1" value="85" min="0" max="100">
+        <div class="rank-slot-list">
+          <div class="rank-slot-item">
+            <div class="rank-slot-label" style="color: #b45309;">🥇 第一名 (100分)：</div>
+            <select id="rankSelect1" class="rank-slot-select" onchange="autoAdjustRankings(1)">
+              <option value="1">【保產業組】</option>
+              <option value="2">【保農業組】</option>
+              <option value="3">【顧民生組】</option>
+              <option value="4">【顧生態組】</option>
+            </select>
           </div>
-          <div class="t-row">
-            <label>【保農業組】：</label>
-            <input type="number" id="tScore2" value="85" min="0" max="100">
+
+          <div class="rank-slot-item">
+            <div class="rank-slot-label" style="color: #475569;">🥈 第二名 (85分)：</div>
+            <select id="rankSelect2" class="rank-slot-select" onchange="autoAdjustRankings(2)">
+              <option value="2">【保農業組】</option>
+              <option value="1">【保產業組】</option>
+              <option value="3">【顧民生組】</option>
+              <option value="4">【顧生態組】</option>
+            </select>
           </div>
-          <div class="t-row">
-            <label>【顧民生組】：</label>
-            <input type="number" id="tScore3" value="85" min="0" max="100">
+
+          <div class="rank-slot-item">
+            <div class="rank-slot-label" style="color: #854d0e;">🥉 第三名 (70分)：</div>
+            <select id="rankSelect3" class="rank-slot-select" onchange="autoAdjustRankings(3)">
+              <option value="3">【顧民生組】</option>
+              <option value="1">【保產業組】</option>
+              <option value="2">【保農業組】</option>
+              <option value="4">【顧生態組】</option>
+            </select>
           </div>
-          <div class="t-row">
-            <label>【顧生態組】：</label>
-            <input type="number" id="tScore4" value="85" min="0" max="100">
+
+          <div class="rank-slot-item">
+            <div class="rank-slot-label" style="color: #64748b;">🎖️ 第四名 (60分)：</div>
+            <select id="rankSelect4" class="rank-slot-select" onchange="autoAdjustRankings(4)">
+              <option value="4">【顧生態組】</option>
+              <option value="1">【保產業組】</option>
+              <option value="2">【保農業組】</option>
+              <option value="3">【顧民生組】</option>
+            </select>
           </div>
         </div>
 
-        <button class="btn-gold" onclick="saveTeacherScores()">💾 儲存老師評分並背景自動加權</button>
+        <button class="btn-gold-submit" onclick="submitTeacherRankings()">💾 提交教授專業評定名次（自動 50/50 加權）</button>
+      </div>
+
+      <!-- 學生投票區 (老師亦可選擇投票或純評審) -->
+      <div id="studentVotingSection" class="student-voting-section">
+        <div id="lockBanner" class="lock-banner">
+          ⚠️ 系統偵測到此手機/網路 IP 已完成投票！為維護全班公平性，無法重複投票。
+        </div>
+
+        <div class="rule-box">
+          <h3>💡 學生投票規則（強制雙票）：</h3>
+          <p>1. <strong>【一個人一定要投兩票】</strong>：請勾選 2 個組別（支持自組 1 票 ＋ 客觀認同 1 票；選 1 票或 3 票以上無法送出）。</p>
+          <p>2. <strong>【手機 IP 唯一防重複】</strong>：每部手機與 IP 僅限送出一次，送出後自動鎖定！</p>
+        </div>
+
+        <div class="ip-indicator">
+          <span>🌐 當前設備與 IP：<strong id="clientIpDisplay">查詢中...</strong></span>
+          <span id="ipStatusBadge" style="color: var(--success); font-weight: bold;">● 具備投票資格</span>
+        </div>
+
+        <div class="selection-counter">
+          目前已勾選：<span id="selectCount">0</span> / 2 票
+        </div>
+
+        <div class="grid-options">
+          <div class="vote-card team-1" onclick="toggleSelection(1)">
+            <div class="team-tag">左前展台 ‧ 經濟命脈</div>
+            <div class="check-icon" id="check-1">✓</div>
+            <h2>【保產業組】</h2>
+            <p>4.06 兆產值 ✕ 18.2MΩ 超純水極限標準 ✕ 自費包水車承諾</p>
+          </div>
+
+          <div class="vote-card team-2" onclick="toggleSelection(2)">
+            <div class="team-tag">右前展台 ‧ 土地正義</div>
+            <div class="check-icon" id="check-2">✓</div>
+            <h2>【保農業組】</h2>
+            <p>水利法第 18 條法定優先權 ✕ 7.4 萬公頃休耕 ✕ 停灌補償直撥佃農</p>
+          </div>
+
+          <div class="vote-card team-3" onclick="toggleSelection(3)">
+            <div class="team-tag">左後展台 ‧ 生存底線</div>
+            <div class="check-icon" id="check-3">✓</div>
+            <h2>【顧民生組】</h2>
+            <p>WHO 250L 生存人權 ✕ 拒絕供五停二負壓爆管 ✕ 智慧夜間降壓</p>
+          </div>
+
+          <div class="vote-card team-4" onclick="toggleSelection(4)">
+            <div class="team-tag">右後展台 ‧ 大自然主權</div>
+            <div class="check-icon" id="check-4">✓</div>
+            <h2>【顧生態組】</h2>
+            <p>Tennant 10% 河川生態基流 ✕ 嚴禁深水井抽水 ✕ 防範高鐵地層下陷</p>
+          </div>
+        </div>
+
+        <button id="btnSubmit" class="btn-submit" disabled onclick="submitVote()">確認送出 2 票（完成即鎖定）</button>
       </div>
 
       <div class="manual-auth-link">
-        <a onclick="promptManualTeacherAuth()">[老師手動解鎖入口]</a>
+        <a onclick="promptManualTeacherAuth()">[老師專屬身分檢核入口]</a>
       </div>
     </div>
 
-    <!-- 視圖三：大螢幕開票總榜 -->
+    <!-- ========================================================
+         【視圖三：大螢幕開票總榜視圖】
+         ======================================================== -->
     <div id="screenView" class="view-panel">
       <div class="dashboard-header">
         <h2>📊 綜合大開票儀表板（學生50% ✕ 老師50%）</h2>
@@ -726,7 +772,7 @@
             <div class="progress-bar-fill" id="bar-1"></div>
           </div>
           <div class="formula-tag" id="detail-1">
-            學生得票：0 票 (0%) ➔ 學生分 0.0 (佔50%) + 老師分 0.0 (佔50%)
+            學生得票：0 票 (0%) ➔ 學生分 0.0 (佔50%) + 老師評定分 0.0 (佔50%)
           </div>
         </div>
 
@@ -742,7 +788,7 @@
             <div class="progress-bar-fill" id="bar-2"></div>
           </div>
           <div class="formula-tag" id="detail-2">
-            學生得票：0 票 (0%) ➔ 學生分 0.0 (佔50%) + 老師分 0.0 (佔50%)
+            學生得票：0 票 (0%) ➔ 學生分 0.0 (佔50%) + 老師評定分 0.0 (佔50%)
           </div>
         </div>
 
@@ -758,7 +804,7 @@
             <div class="progress-bar-fill" id="bar-3"></div>
           </div>
           <div class="formula-tag" id="detail-3">
-            學生得票：0 票 (0%) ➔ 學生分 0.0 (佔50%) + 老師分 0.0 (佔50%)
+            學生得票：0 票 (0%) ➔ 學生分 0.0 (佔50%) + 老師評定分 0.0 (佔50%)
           </div>
         </div>
 
@@ -774,7 +820,7 @@
             <div class="progress-bar-fill" id="bar-4"></div>
           </div>
           <div class="formula-tag" id="detail-4">
-            學生得票：0 票 (0%) ➔ 學生分 0.0 (佔50%) + 老師分 0.0 (佔50%)
+            學生得票：0 票 (0%) ➔ 學生分 0.0 (佔50%) + 老師評定分 0.0 (佔50%)
           </div>
         </div>
       </div>
@@ -787,6 +833,7 @@
     </div>
   </main>
 
+  <!-- 學生投票成功彈窗 -->
   <div id="successModal" class="modal">
     <div class="modal-box">
       <h2>🎉 投票成功完成！</h2>
@@ -796,10 +843,16 @@
   </div>
 
   <script>
+    // 👑 授權之唯一指導教授帳號
     const AUTHORIZED_TEACHER_EMAIL = "madduxbee@gmail.com";
 
+    // 核心數據
     let studentVotes = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    // 老師名次對應基準分：第1名100分, 第2名85分, 第3名70分, 第4名60分
     let teacherScores = { 1: 85, 2: 85, 3: 85, 4: 85 };
+    let teacherRankings = [1, 2, 3, 4]; // 預設名次
+    let teacherRankSubmitted = false;
+
     let totalVoters = 0;
     let selectedTeams = new Set();
     let currentClientIp = "127.0.0.1";
@@ -808,6 +861,7 @@
     let isTeacherDevice = false;
     let qrInstance = null;
 
+    // 初始化視圖
     function initDefaultViewRouting() {
       const urlParams = new URLSearchParams(window.location.search);
       const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -820,21 +874,15 @@
       }
     }
 
+    // 渲染 QR Code
     function renderHeroQrCode() {
       const qrContainer = document.getElementById('qrcodeBox');
+      if (!qrContainer) return;
       qrContainer.innerHTML = '';
 
-      // 優先偵測 Google Sites 上層真實公開網址 (document.referrer)
       let parentUrl = document.referrer ? document.referrer.split('#')[0].split('?')[0] : '';
       let currentHref = parentUrl || window.location.href.split('#')[0].split('?')[0];
       let targetVoteUrl = currentHref + '?mode=vote';
-
-      const customInput = document.getElementById('targetUrlInput');
-      if (customInput && customInput.value.trim() !== '') {
-        targetVoteUrl = customInput.value.trim();
-      } else if (customInput) {
-        customInput.value = targetVoteUrl;
-      }
 
       qrInstance = new QRCode(qrContainer, {
         text: targetVoteUrl,
@@ -844,10 +892,6 @@
         colorLight: "#ffffff",
         correctLevel: QRCode.CorrectLevel.H
       });
-    }
-
-    function regenerateQrCode() {
-      renderHeroQrCode();
     }
 
     function switchView(viewId) {
@@ -867,6 +911,7 @@
       }
     }
 
+    // 檢查老師身分
     function checkGoogleAccountAuth() {
       const cachedAuth = localStorage.getItem('teacher_auth_email_06');
       if (cachedAuth === AUTHORIZED_TEACHER_EMAIL) {
@@ -904,13 +949,19 @@
       } catch (e) {}
     }
 
+    // 👑 解鎖老師 1234 名次評審面板
     function grantTeacherPrivileges() {
       isTeacherDevice = true;
       document.getElementById('teacherAuthBar').style.display = 'flex';
-      document.getElementById('teacherPanel').style.display = 'block';
-      for (let i = 1; i <= 4; i++) {
-        if (document.getElementById(`tScore${i}`)) {
-          document.getElementById(`tScore${i}`).value = teacherScores[i] || 85;
+      document.getElementById('teacherRankingCard').style.display = 'block';
+
+      // 載入已儲存的名次
+      const savedRanks = localStorage.getItem('teacher_ranks_06');
+      if (savedRanks) {
+        teacherRankings = JSON.parse(savedRanks);
+        for (let i = 1; i <= 4; i++) {
+          const sel = document.getElementById(`rankSelect${i}`);
+          if (sel) sel.value = teacherRankings[i-1];
         }
       }
     }
@@ -920,10 +971,59 @@
       if (email && email.trim().toLowerCase() === AUTHORIZED_TEACHER_EMAIL.toLowerCase()) {
         localStorage.setItem('teacher_auth_email_06', AUTHORIZED_TEACHER_EMAIL);
         grantTeacherPrivileges();
-        alert("✅ 身分核驗成功！已成功綁定畢博士教席權限！");
+        alert("✅ 身分核驗成功！已成功解鎖畢博士 1234 名次評審面板！");
       } else if (email) {
-        alert("❌ 帳號不符，無法開啟教師評審面板。");
+        alert("❌ 帳號不符，無法開啟教師評審席。");
       }
+    }
+
+    // 防名次重複選擇防呆
+    function autoAdjustRankings(changedSlot) {
+      const selIds = [1, 2, 3, 4];
+      const currentVals = selIds.map(i => parseInt(document.getElementById(`rankSelect${i}`).value));
+      const changedVal = currentVals[changedSlot - 1];
+
+      // 檢查其他槽是否有重複
+      selIds.forEach((i, idx) => {
+        if (i !== changedSlot && currentVals[idx] === changedVal) {
+          // 找到沒被選走的組別交換
+          const allTeams = [1, 2, 3, 4];
+          const available = allTeams.find(t => !currentVals.includes(t) || t === teacherRankings[changedSlot - 1]);
+          if (available) {
+            document.getElementById(`rankSelect${i}`).value = available;
+          }
+        }
+      });
+    }
+
+    // 提交老師 1234 名次評定
+    function submitTeacherRankings() {
+      const r1 = parseInt(document.getElementById('rankSelect1').value);
+      const r2 = parseInt(document.getElementById('rankSelect2').value);
+      const r3 = parseInt(document.getElementById('rankSelect3').value);
+      const r4 = parseInt(document.getElementById('rankSelect4').value);
+
+      const chosen = [r1, r2, r3, r4];
+      const set = new Set(chosen);
+      if (set.size !== 4) {
+        alert("⚠️ 四個名次必須分別為不同的組別，請檢查是否有重複！");
+        return;
+      }
+
+      teacherRankings = chosen;
+      // 名次換算分數：第1名100, 第2名85, 第3名70, 第4名60
+      teacherScores[r1] = 100;
+      teacherScores[r2] = 85;
+      teacherScores[r3] = 70;
+      teacherScores[r4] = 60;
+      teacherRankSubmitted = true;
+
+      localStorage.setItem('teacher_ranks_06', JSON.stringify(teacherRankings));
+      saveData();
+      calculateCompositeScores();
+
+      const teamNames = { 1: "保產業組", 2: "保農業組", 3: "顧民生組", 4: "顧生態組" };
+      alert(`✅ 畢博士評審名次提交成功！\n🥇 第1名：${teamNames[r1]} (100分)\n🥈 第2名：${teamNames[r2]} (85分)\n🥉 第3名：${teamNames[r3]} (70分)\n🎖️ 第4名：${teamNames[r4]} (60分)\n\n背景已自動完成 50% 學生 ＋ 50% 老師加權精算！`);
     }
 
     function initFingerprintAndIp() {
@@ -1021,16 +1121,6 @@
       calculateCompositeScores();
     }
 
-    function saveTeacherScores() {
-      for (let i = 1; i <= 4; i++) {
-        const val = parseFloat(document.getElementById(`tScore${i}`).value) || 0;
-        teacherScores[i] = Math.min(100, Math.max(0, val));
-      }
-      saveData();
-      calculateCompositeScores();
-      alert("✅ 畢博士專業評分已成功儲存！背景已自動完成 50% 學生 + 50% 老師加權精算！");
-    }
-
     function closeModal(modalId) {
       document.getElementById(modalId).classList.remove('active');
     }
@@ -1039,6 +1129,14 @@
       const totalVotes = studentVotes[1] + studentVotes[2] + studentVotes[3] + studentVotes[4];
       document.getElementById('liveVoterCount').innerText = totalVoters;
       document.getElementById('liveTotalVotes').innerText = totalVotes;
+      const tBadge = document.getElementById('teacherStatusBadge');
+      if (tBadge) {
+        if (teacherRankSubmitted) {
+          tBadge.innerHTML = '👨‍🏫 老師名次審定：<strong style="color: #16a34a;">已完成 ✓</strong>';
+        } else {
+          tBadge.innerHTML = '👨‍🏫 老師名次審定：<strong style="color: #d97706;">待評定</strong>';
+        }
+      }
     }
 
     function calculateCompositeScores() {
@@ -1054,11 +1152,16 @@
         const teacherWeighted = tScore * 0.50;
         const finalScore = studentWeighted + teacherWeighted;
 
+        // 計算老師給的名次
+        const rankIdx = teacherRankings.indexOf(i);
+        const rankText = rankIdx >= 0 ? `第 ${rankIdx + 1} 名` : "未定";
+
         compositeScores[i] = {
           final: finalScore.toFixed(1),
           studentPct: studentPct.toFixed(1),
           sVotes: sVotes,
           tScore: tScore.toFixed(0),
+          tRankText: rankText,
           sWeighted: studentWeighted.toFixed(1),
           tWeighted: teacherWeighted.toFixed(1)
         };
@@ -1071,14 +1174,14 @@
         const data = compositeScores[i];
         document.getElementById(`score-summary-${i}`).innerText = `綜合總分：${data.final} 分`;
         document.getElementById(`detail-${i}`).innerText = 
-          `學生得票：${data.sVotes} 票 (${data.studentPct}%) ➔ 學生分 ${data.sWeighted} (佔50%) + 老師分 ${data.tWeighted} (佔50%，評分${data.tScore})`;
+          `學生雙票：${data.sVotes} 票 (${data.studentPct}%) ➔ 學生分 ${data.sWeighted} (50%) + 老師評定：${data.tRankText} (${data.tScore}分 ➔ ${data.tWeighted}分)`;
 
         const barWidth = maxScore > 0 ? (parseFloat(data.final) / maxScore) * 100 : 0;
         document.getElementById(`bar-${i}`).style.width = `${barWidth}%`;
 
         const badgeEl = document.getElementById(`badge-${i}`);
         badgeEl.innerHTML = '';
-        if (totalVotes > 0 || Object.values(teacherScores).some(s => s > 0)) {
+        if (totalVotes > 0 || teacherRankSubmitted) {
           if (i === sortedTeams[0]) {
             badgeEl.innerHTML = '<span class="award-badge award-1">🥇 冠軍組 (第一名 ‧ 三選一特權)</span>';
           } else if (i === sortedTeams[1]) {
@@ -1104,11 +1207,14 @@
       if (confirm("確定要重置所有投票、IP 紀錄與老師分數嗎？")) {
         studentVotes = { 1: 0, 2: 0, 3: 0, 4: 0 };
         teacherScores = { 1: 85, 2: 85, 3: 85, 4: 85 };
+        teacherRankings = [1, 2, 3, 4];
+        teacherRankSubmitted = false;
         totalVoters = 0;
         votedIps.clear();
         selectedTeams.clear();
         localStorage.removeItem('student_votes_06');
         localStorage.removeItem('teacher_scores_06');
+        localStorage.removeItem('teacher_ranks_06');
         localStorage.removeItem('total_voters_06');
         localStorage.removeItem('has_voted_06');
         localStorage.removeItem('voted_ips_06');
@@ -1135,16 +1241,16 @@
     function loadSavedData() {
       const sv = localStorage.getItem('student_votes_06');
       const ts = localStorage.getItem('teacher_scores_06');
+      const tr = localStorage.getItem('teacher_ranks_06');
       const tv = localStorage.getItem('total_voters_06');
       if (sv) studentVotes = JSON.parse(sv);
-      if (ts) teacherScores = JSON.parse(ts);
+      if (ts) {
+        teacherScores = JSON.parse(ts);
+        teacherRankSubmitted = true;
+      }
+      if (tr) teacherRankings = JSON.parse(tr);
       if (tv) totalVoters = parseInt(tv);
 
-      for (let i = 1; i <= 4; i++) {
-        if (document.getElementById(`tScore${i}`)) {
-          document.getElementById(`tScore${i}`).value = teacherScores[i] || 85;
-        }
-      }
       updateLiveStats();
       calculateCompositeScores();
     }
