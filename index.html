@@ -538,7 +538,7 @@
       height: 100%;
       width: 0%;
       border-radius: 11px;
-      transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: width 1.8s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .team-1 .progress-bar-fill { background: linear-gradient(90deg, #ef4444, #dc2626); }
@@ -584,6 +584,55 @@
     }
     .modal-box h2 { font-size: 19px; color: var(--primary); margin-bottom: 8px; }
     .modal-box p { font-size: 13px; color: var(--text-muted); margin-bottom: 18px; }
+
+    /* 🎬 大開票全螢幕期待倒數動畫 */
+    .countdown-overlay {
+      display: none;
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background: radial-gradient(circle, rgba(15, 43, 92, 0.96) 0%, rgba(5, 15, 35, 0.99) 100%);
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      color: white;
+      text-align: center;
+      backdrop-filter: blur(8px);
+    }
+    .countdown-overlay.active { display: flex; }
+    .countdown-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 18px;
+    }
+    .countdown-badge {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(253, 230, 138, 0.4);
+      padding: 8px 26px;
+      border-radius: 30px;
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: 2px;
+      color: #fde68a;
+    }
+    .countdown-num {
+      font-size: 130px;
+      font-weight: 900;
+      color: #fbbf24;
+      text-shadow: 0 0 35px rgba(251, 191, 36, 0.8), 0 0 70px rgba(245, 158, 11, 0.6);
+      line-height: 1;
+      animation: pulseZoom 0.9s ease-in-out infinite alternate;
+    }
+    .countdown-sub {
+      font-size: 22px;
+      font-weight: 700;
+      color: #e2e8f0;
+      letter-spacing: 3px;
+    }
+    @keyframes pulseZoom {
+      0% { transform: scale(0.92); opacity: 0.85; }
+      100% { transform: scale(1.12); opacity: 1; text-shadow: 0 0 50px rgba(251, 191, 36, 1); }
+    }
   </style>
 </head>
 <body>
@@ -619,7 +668,7 @@
         </div>
 
         <div>
-          <button class="btn-hero-action" onclick="switchView('screenView')">🎬 揭曉綜合開票總榜</button>
+          <button class="btn-hero-action" onclick="switchView('screenView'); triggerDramaticReveal();">🎬 揭曉綜合開票總榜</button>
         </div>
       </div>
     </div>
@@ -821,7 +870,7 @@
       </div>
 
       <div style="display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;">
-        <button class="btn-submit" style="max-width: 240px; padding: 12px;" onclick="calculateCompositeScores()">🎬 即時刷新 / 動態大開票</button>
+        <button class="btn-submit" style="max-width: 240px; padding: 12px;" onclick="triggerDramaticReveal()">🎬 即時刷新 / 動態大開票</button>
         <button class="btn-submit" style="max-width: 180px; padding: 12px; background: var(--accent);" onclick="resetAllData()">🔄 一鍵重置</button>
       </div>
     </div>
@@ -843,6 +892,15 @@
       <p style="font-size: 13px; color: #78350f; margin-bottom: 14px;">請畢博士拿 iPhone 掃描此專屬條碼，一秒直通解鎖名次排序面板：</p>
       <div id="teacherQrcodeContainer" style="display: flex; justify-content: center; margin-bottom: 16px;"></div>
       <button class="btn-submit" style="background: #b45309;" onclick="closeModal('teacherQrModal')">關閉視窗</button>
+    </div>
+  </div>
+
+  <!-- 🎬 大開票全螢幕期待倒數動畫 -->
+  <div id="countdownModal" class="countdown-overlay">
+    <div class="countdown-card">
+      <div class="countdown-badge">⚡ 逢甲大學通識講堂《水水臺灣》大開票</div>
+      <div id="countdownNumber" class="countdown-num">3</div>
+      <div id="countdownSub" class="countdown-sub">全場屏息 ‧ 統計運算中...</div>
     </div>
   </div>
 
@@ -1196,7 +1254,77 @@
       }
     }
 
-    function calculateCompositeScores() {
+    // 🎵 Web Audio API 逼真音效合成器 (免外掛檔案，100% 離線支援)
+    function playAudioTone(freq, duration, type = 'sine') {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gainNode.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+        osc.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {}
+    }
+
+    // 🎬 震撼期待感：3-2-1 倒數大開票動畫
+    function triggerDramaticReveal() {
+      const modal = document.getElementById('countdownModal');
+      const numEl = document.getElementById('countdownNumber');
+      const subEl = document.getElementById('countdownSub');
+      if (!modal || !numEl) {
+        calculateCompositeScores(true);
+        return;
+      }
+
+      modal.classList.add('active');
+      let count = 3;
+      numEl.innerText = count;
+      subEl.innerText = "全場屏息 ‧ 統計運算中...";
+      playAudioTone(440, 0.35, 'triangle');
+
+      const timer = setInterval(() => {
+        count--;
+        if (count > 0) {
+          numEl.innerText = count;
+          playAudioTone(440 + (3 - count) * 80, 0.35, 'triangle');
+        } else {
+          clearInterval(timer);
+          numEl.innerText = "🎉";
+          subEl.innerText = "開 票 揭 曉！";
+          playAudioTone(880, 0.6, 'triangle');
+          setTimeout(() => playAudioTone(1174, 1.2, 'sine'), 150);
+
+          setTimeout(() => {
+            modal.classList.remove('active');
+            calculateCompositeScores(true);
+          }, 700);
+        }
+      }, 900);
+    }
+
+    function animateNumberCounter(el, start, end, duration) {
+      const startTime = performance.now();
+      function update(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+        const easeProgress = 1 - Math.pow(1 - progress, 3);
+        const current = start + (end - start) * easeProgress;
+        el.innerText = `綜合總分：${current.toFixed(1)} 分`;
+        if (progress < 1) {
+          requestAnimationFrame(update);
+        } else {
+          el.innerText = `綜合總分：${end.toFixed(1)} 分`;
+        }
+      }
+      requestAnimationFrame(update);
+    }
+
+    function calculateCompositeScores(animateRoll = false) {
       updateLiveStats();
       const totalVotes = studentVotes[1] + studentVotes[2] + studentVotes[3] + studentVotes[4];
 
@@ -1205,7 +1333,7 @@
 
       let compositeScores = {};
       for (let i = 1; i <= 4; i++) {
-        const sVotes = studentVotes[i];
+        const sVotes = studentVotes[i] || 0;
         const studentPct = totalVotes > 0 ? (sVotes / totalVotes) * 100 : 0;
         const studentWeighted = studentPct * 0.50;
 
@@ -1217,9 +1345,10 @@
           tScore = RANK_SCORE_TABLE[rankIdx];
           rankText = `第 ${rankIdx + 1} 名`;
           teacherScores[i] = tScore;
-        } else if (teacherScores[i]) {
-          tScore = parseFloat(teacherScores[i]);
-          rankText = rankIdx >= 0 ? `第 ${rankIdx + 1} 名` : "自訂";
+        } else {
+          tScore = 0;
+          rankText = "待評定";
+          teacherScores[i] = 0;
         }
 
         const teacherWeighted = tScore * 0.50;
@@ -1227,6 +1356,7 @@
 
         compositeScores[i] = {
           final: finalScore.toFixed(1),
+          finalNum: finalScore,
           studentPct: studentPct.toFixed(1),
           sVotes: sVotes,
           tScore: tScore.toFixed(0),
@@ -1236,8 +1366,8 @@
         };
       }
 
-      const sortedTeams = [1, 2, 3, 4].sort((a, b) => parseFloat(compositeScores[b].final) - parseFloat(compositeScores[a].final));
-      const maxScore = Math.max(...Object.values(compositeScores).map(c => parseFloat(c.final))) || 1;
+      const sortedTeams = [1, 2, 3, 4].sort((a, b) => compositeScores[b].finalNum - compositeScores[a].finalNum);
+      const maxScore = Math.max(...Object.values(compositeScores).map(c => c.finalNum)) || 1;
 
       // 1. 動態由高至低重新排列卡片視覺順序 (order)
       sortedTeams.forEach((teamId, rankOrder) => {
@@ -1245,19 +1375,32 @@
         if (rowEl) rowEl.style.order = rankOrder;
       });
 
-      // 2. 渲染各組分數與冠亞軍徽章
+      // 2. 渲染各組分數與進度條
       for (let i = 1; i <= 4; i++) {
         const data = compositeScores[i];
-        document.getElementById(`score-summary-${i}`).innerText = `綜合總分：${data.final} 分`;
-        document.getElementById(`detail-${i}`).innerText = 
+        const scoreEl = document.getElementById(`score-summary-${i}`);
+        const barEl = document.getElementById(`bar-${i}`);
+        const badgeEl = document.getElementById(`badge-${i}`);
+        const detailEl = document.getElementById(`detail-${i}`);
+
+        detailEl.innerText = 
           `學生雙票：${data.sVotes} 票 (${data.studentPct}%) ➔ 學生分 ${data.sWeighted} (50%) + 老師評定：${data.tRankText} (${data.tScore}分 ➔ ${data.tWeighted}分)`;
 
-        const barWidth = maxScore > 0 ? (parseFloat(data.final) / maxScore) * 100 : 0;
-        document.getElementById(`bar-${i}`).style.width = `${barWidth}%`;
+        const barWidth = (data.finalNum > 0 && maxScore > 0) ? (data.finalNum / maxScore) * 100 : 0;
 
-        const badgeEl = document.getElementById(`badge-${i}`);
+        if (animateRoll && data.finalNum > 0) {
+          barEl.style.width = '0%';
+          setTimeout(() => {
+            barEl.style.width = `${barWidth}%`;
+          }, 60);
+          animateNumberCounter(scoreEl, 0, data.finalNum, 1400);
+        } else {
+          barEl.style.width = `${barWidth}%`;
+          scoreEl.innerText = `綜合總分：${data.final} 分`;
+        }
+
         badgeEl.innerHTML = '';
-        if (totalVotes > 0 || teacherRankSubmitted) {
+        if (totalVotes > 0 && teacherRankSubmitted && data.finalNum > 0) {
           if (i === sortedTeams[0]) {
             badgeEl.innerHTML = '<span class="award-badge award-1">🥇 冠軍組 (第一名 ‧ 三選一特權)</span>';
           } else if (i === sortedTeams[1]) {
@@ -1267,28 +1410,16 @@
       }
     }
 
-    function addMockVotes() {
-      for (let p = 0; p < 35; p++) {
-        const arr = [1, 2, 3, 4].sort(() => Math.random() - 0.5);
-        studentVotes[arr[0]] += 1;
-        studentVotes[arr[1]] += 1;
-        totalVoters += 1;
-      }
-      saveData();
-      calculateCompositeScores();
-      alert("已模擬 35 位同學投票（共投出 70 票）！");
-    }
-
     function resetAllData() {
-      if (confirm("確定要重置所有投票、IP 紀錄與老師分數嗎？")) {
+      if (confirm("確定要重置所有投票、IP 紀錄與老師分數嗎？重置後所有分數將完全歸零！")) {
         studentVotes = { 1: 0, 2: 0, 3: 0, 4: 0 };
-        teacherScores = { 1: 85, 2: 85, 3: 85, 4: 85 };
+        teacherScores = { 1: 0, 2: 0, 3: 0, 4: 0 };
         teacherRankings = [1, 2, 3, 4];
         teacherRankSubmitted = false;
         totalVoters = 0;
         votedIps.clear();
         selectedTeams.clear();
-        localStorage.setItem('fcu_votes_initialized_70v', 'reset');
+        localStorage.setItem('fcu_votes_v3_applied', 'reset');
         localStorage.removeItem('student_votes_06');
         localStorage.removeItem('teacher_scores_06');
         localStorage.removeItem('teacher_ranks_06');
@@ -1305,7 +1436,7 @@
         document.getElementById('ipStatusBadge').innerText = '● 具備投票資格';
 
         saveData();
-        calculateCompositeScores();
+        calculateCompositeScores(false);
       }
     }
 
