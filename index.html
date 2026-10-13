@@ -850,14 +850,14 @@
     // 👑 授權之唯一指導教授帳號
     const AUTHORIZED_TEACHER_EMAIL = "madduxbee@gmail.com";
 
-    // 核心數據
-    let studentVotes = { 1: 0, 2: 0, 3: 0, 4: 0 };
+    // 核心數據 (70 位學生雙票，共 140 票 ✕ 畢博士 1234 名次審定)
+    let studentVotes = { 1: 42, 2: 28, 3: 44, 4: 26 };
     // 老師名次對應基準分：第1名100分, 第2名85分, 第3名70分, 第4名60分
-    let teacherScores = { 1: 85, 2: 85, 3: 85, 4: 85 };
-    let teacherRankings = [1, 2, 3, 4]; // 預設名次
-    let teacherRankSubmitted = false;
+    let teacherScores = { 1: 85, 2: 60, 3: 100, 4: 70 };
+    let teacherRankings = [3, 1, 4, 2]; // 預設名次：第1名組3(100分), 第2名組1(85分), 第3名組4(70分), 第4名組2(60分)
+    let teacherRankSubmitted = true;
 
-    let totalVoters = 0;
+    let totalVoters = 70;
     let selectedTeams = new Set();
     let currentClientIp = "127.0.0.1";
     let votedIps = new Set();
@@ -1269,6 +1269,7 @@
         totalVoters = 0;
         votedIps.clear();
         selectedTeams.clear();
+        localStorage.setItem('fcu_votes_initialized_70v', 'reset');
         localStorage.removeItem('student_votes_06');
         localStorage.removeItem('teacher_scores_06');
         localStorage.removeItem('teacher_ranks_06');
@@ -1292,21 +1293,33 @@
     function saveData() {
       localStorage.setItem('student_votes_06', JSON.stringify(studentVotes));
       localStorage.setItem('teacher_scores_06', JSON.stringify(teacherScores));
+      localStorage.setItem('teacher_ranks_06', JSON.stringify(teacherRankings));
       localStorage.setItem('total_voters_06', totalVoters.toString());
     }
 
     function loadSavedData() {
-      const sv = localStorage.getItem('student_votes_06');
-      const ts = localStorage.getItem('teacher_scores_06');
-      const tr = localStorage.getItem('teacher_ranks_06');
-      const tv = localStorage.getItem('total_voters_06');
-      if (sv) studentVotes = JSON.parse(sv);
-      if (ts) {
-        teacherScores = JSON.parse(ts);
+      const initTag = localStorage.getItem('fcu_votes_initialized_70v');
+      if (initTag !== 'reset') {
+        studentVotes = { 1: 42, 2: 28, 3: 44, 4: 26 };
+        teacherScores = { 1: 85, 2: 60, 3: 100, 4: 70 };
+        teacherRankings = [3, 1, 4, 2];
         teacherRankSubmitted = true;
+        totalVoters = 70;
+        localStorage.setItem('fcu_votes_initialized_70v', 'true');
+        saveData();
+      } else {
+        const sv = localStorage.getItem('student_votes_06');
+        const ts = localStorage.getItem('teacher_scores_06');
+        const tr = localStorage.getItem('teacher_ranks_06');
+        const tv = localStorage.getItem('total_voters_06');
+        if (sv) studentVotes = JSON.parse(sv);
+        if (ts) {
+          teacherScores = JSON.parse(ts);
+          teacherRankSubmitted = true;
+        }
+        if (tr) teacherRankings = JSON.parse(tr);
+        if (tv) totalVoters = parseInt(tv);
       }
-      if (tr) teacherRankings = JSON.parse(tr);
-      if (tv) totalVoters = parseInt(tv);
 
       updateLiveStats();
       calculateCompositeScores();
