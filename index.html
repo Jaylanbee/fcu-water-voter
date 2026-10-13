@@ -788,7 +788,7 @@
           </div>
         </div>
 
-        <button id="btnSubmit" class="btn-submit" disabled onclick="submitVote()">確認送出 2 票（完成即鎖定）</button>
+        <button id="btnSubmit" class="btn-submit" disabled onclick="submitVote()">請勾選 2 個組別（共須投 2 票）</button>
       </div>
     </div>
 
@@ -1206,14 +1206,27 @@
         card.classList.add('selected');
       }
 
-      document.getElementById('selectCount').innerText = selectedTeams.size;
+      const count = selectedTeams.size;
+      document.getElementById('selectCount').innerText = count;
       const btn = document.getElementById('btnSubmit');
-      btn.disabled = (selectedTeams.size !== 2);
+      if (count === 0) {
+        btn.disabled = true;
+        btn.innerText = "請勾選 2 個組別（共須投 2 票）";
+      } else if (count === 1) {
+        btn.disabled = true;
+        btn.innerText = "⚠️ 還差 1 票！請再勾選 1 組（共須投 2 票）";
+      } else if (count === 2) {
+        btn.disabled = false;
+        btn.innerText = "✓ 已選滿 2 票！點擊確認送出（送出即鎖定）";
+      } else {
+        btn.disabled = true;
+        btn.innerText = "必須且只能投 2 票";
+      }
     }
 
     function submitVote() {
       if (selectedTeams.size !== 2) {
-        alert("必須且只能勾選 2 個組別！");
+        alert("⚠️ 投票無效！每位同學必須且只能勾選 2 個組別，您目前僅選 " + selectedTeams.size + " 票！");
         return;
       }
 
