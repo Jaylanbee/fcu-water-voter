@@ -1200,18 +1200,30 @@
       updateLiveStats();
       const totalVotes = studentVotes[1] + studentVotes[2] + studentVotes[3] + studentVotes[4];
 
+      // 名次絕對對應基準分：第1名100分, 第2名85分, 第3名70分, 第4名60分
+      const RANK_SCORE_TABLE = [100, 85, 70, 60];
+
       let compositeScores = {};
       for (let i = 1; i <= 4; i++) {
         const sVotes = studentVotes[i];
         const studentPct = totalVotes > 0 ? (sVotes / totalVotes) * 100 : 0;
         const studentWeighted = studentPct * 0.50;
-        const tScore = parseFloat(teacherScores[i]) || 0;
+
+        // 計算老師給的名次與對應基準分
+        const rankIdx = teacherRankings.indexOf(i);
+        let tScore = 0;
+        let rankText = "待評定";
+        if (teacherRankSubmitted && rankIdx >= 0) {
+          tScore = RANK_SCORE_TABLE[rankIdx];
+          rankText = `第 ${rankIdx + 1} 名`;
+          teacherScores[i] = tScore;
+        } else if (teacherScores[i]) {
+          tScore = parseFloat(teacherScores[i]);
+          rankText = rankIdx >= 0 ? `第 ${rankIdx + 1} 名` : "自訂";
+        }
+
         const teacherWeighted = tScore * 0.50;
         const finalScore = studentWeighted + teacherWeighted;
-
-        // 計算老師給的名次
-        const rankIdx = teacherRankings.indexOf(i);
-        const rankText = rankIdx >= 0 ? `第 ${rankIdx + 1} 名` : "未定";
 
         compositeScores[i] = {
           final: finalScore.toFixed(1),
@@ -1227,6 +1239,13 @@
       const sortedTeams = [1, 2, 3, 4].sort((a, b) => parseFloat(compositeScores[b].final) - parseFloat(compositeScores[a].final));
       const maxScore = Math.max(...Object.values(compositeScores).map(c => parseFloat(c.final))) || 1;
 
+      // 1. 動態由高至低重新排列卡片視覺順序 (order)
+      sortedTeams.forEach((teamId, rankOrder) => {
+        const rowEl = document.querySelector(`.result-row.team-${teamId}`);
+        if (rowEl) rowEl.style.order = rankOrder;
+      });
+
+      // 2. 渲染各組分數與冠亞軍徽章
       for (let i = 1; i <= 4; i++) {
         const data = compositeScores[i];
         document.getElementById(`score-summary-${i}`).innerText = `綜合總分：${data.final} 分`;
@@ -1298,14 +1317,14 @@
     }
 
     function loadSavedData() {
-      const initTag = localStorage.getItem('fcu_votes_initialized_70v');
-      if (initTag !== 'reset') {
+      // 強制升級至 V3 乾淨正式開票版本 (徹底覆蓋舊版 70 票殘留與全組 85 分 Bug)
+      if (localStorage.getItem('fcu_votes_v3_applied') !== 'true') {
         studentVotes = { 1: 42, 2: 28, 3: 44, 4: 26 };
         teacherScores = { 1: 85, 2: 60, 3: 100, 4: 70 };
         teacherRankings = [3, 1, 4, 2];
         teacherRankSubmitted = true;
         totalVoters = 70;
-        localStorage.setItem('fcu_votes_initialized_70v', 'true');
+        localStorage.setItem('fcu_votes_v3_applied', 'true');
         saveData();
       } else {
         const sv = localStorage.getItem('student_votes_06');
