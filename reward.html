@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>逢甲大學《水水臺灣》分組戰略榮譽獎勵登記系統</title>
+  <style>
+    :root {
+      --bg-dark: #070d18;
+      --card-bg: #0f1b2d;
+      --card-border: #1e3352;
+      --accent-gold: #d4af37;
+      --accent-gold-light: #f3e5ab;
+      --accent-blue: #38bdf8;
+      --accent-green: #34d399;
+      --accent-silver: #94a3b8;
+      --accent-bronze: #d97706;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --danger: #f87171;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 24px 16px 60px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 680px;
+    }
+
+    /* Header */
+    .header {
+      text-align: center;
+      margin-bottom: 24px;
+      padding-bottom: 16px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .eyebrow {
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--accent-gold);
+      text-transform: uppercase;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .main-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--text-main);
+      line-height: 1.35;
+      margin-bottom: 8px;
+    }
+
+    .sub-title {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+    }
+
+    /* Official Ranking Announcement Banner */
+    .ranking-banner {
+      background: rgba(15, 27, 45, 0.85);
+      border: 1px solid var(--card-border);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin-bottom: 20px;
+      font-size: 13px;
+    }
+
+    .ranking-banner-title {
+      color: var(--accent-gold);
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .ranking-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .rank-pill {
+      padding: 6px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .pill-champion {
+      background: rgba(212, 175, 55, 0.15);
+      border: 1px solid var(--accent-gold);
+      color: var(--accent-gold-light);
+    }
+
+    .pill-runnerup {
+      background: rgba(148, 163, 184, 0.15);
+      border: 1px solid var(--accent-silver);
+      color: var(--text-main);
+    }
+
+    .pill-third {
+      background: rgba(217, 119, 6, 0.15);
+      border: 1px solid var(--accent-bronze);
+      color: var(--accent-gold-light);
+    }
+
+    /* Card */
+    .card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--accent-gold);
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    /* Input Box */
+    .input-group {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
+    .input-box {
+      flex: 1;
+      background: var(--bg-dark);
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 12px 16px;
+      font-size: 16px;
+      border-radius: 8px;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .input-box:focus {
+      border-color: var(--accent-gold);
+    }
+
+    .btn-search {
+      background: var(--accent-gold);
+      color: #070d18;
+      border: none;
+      padding: 0 20px;
+      border-radius: 8px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+      white-space: nowrap;
+    }
+
+    .btn-search:hover {
+      opacity: 0.9;
+    }
+
+    .quick-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 8px;
+    }
+
+    .quick-tag {
+      font-size: 12px;
+      background: rgba(30, 51, 82, 0.5);
+      border: 1px solid var(--card-border);
+      color: var(--accent-blue);
+      padding: 4px 8px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .quick-tag:hover {
+      background: var(--card-border);
+    }
+
+    /* Student Profile Box */
+    .student-badge {
+      background: rgba(15, 27, 45, 0.9);
+      border: 1px solid var(--accent-gold);
+      border-radius: 10px;
+      padding: 16px;
+      margin-bottom: 20px;
+      display: none;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .badge-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--card-border);
+    }
+
+    .badge-name {
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    .badge-id {
+      font-size: 14px;
+      color: var(--accent-gold);
+      font-family: monospace;
+      font-weight: 600;
+    }
+
+    .badge-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      font-size: 13px;
+    }
+
+    .badge-field {
+      color: var(--text-muted);
+    }
+
+    .badge-val {
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .rank-tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 4px;
+      font-size: 13px;
+      font-weight: 700;
+    }
+
+    .rank-1 { background: rgba(212, 175, 55, 0.2); color: var(--accent-gold); border: 1px solid var(--accent-gold); }
+    .rank-2 { background: rgba(148, 163, 184, 0.2); color: var(--accent-silver); border: 1px solid var(--accent-silver); }
+    .rank-3 { background: rgba(217, 119, 6, 0.2); color: var(--accent-bronze); border: 1px solid var(--accent-bronze); }
+
+    /* Reward Options for Champion */
+    .reward-options {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      margin: 16px 0;
+    }
+
+    .opt-card {
+      background: var(--bg-dark);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      position: relative;
+    }
+
+    .opt-card:hover {
+      border-color: var(--accent-gold);
+    }
+
+    .opt-card.selected {
+      border-color: var(--accent-gold);
+      background: rgba(212, 175, 55, 0.08);
+      box-shadow: 0 0 12px rgba(212, 175, 55, 0.2);
+    }
+
+    .opt-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--accent-gold-light);
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    .opt-desc {
+      font-size: 13px;
+      color: var(--text-muted);
+      line-height: 1.45;
+    }
+
+    .opt-extra {
+      margin-top: 10px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--card-border);
+      display: none;
+    }
+
+    .opt-card.selected .opt-extra {
+      display: block;
+    }
+
+    .opt-extra input, .opt-extra select {
+      width: 100%;
+      background: #0f1b2d;
+      border: 1px solid var(--card-border);
+      color: var(--text-main);
+      padding: 8px 12px;
+      border-radius: 6px;
+      font-size: 13px;
+    }
+
+    /* Fixed Reward Notice for 2nd/3rd */
+    .fixed-notice {
+      background: rgba(30, 51, 82, 0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 18px;
+      text-align: center;
+      margin: 16px 0;
+    }
+
+    .fixed-points {
+      font-size: 28px;
+      font-weight: 800;
+      color: var(--accent-gold);
+      margin: 8px 0;
+    }
+
+    /* Action Button */
+    .btn-submit {
+      width: 100%;
+      background: linear-gradient(135deg, #d4af37 0%, #b89327 100%);
+      color: #070d18;
+      border: none;
+      padding: 14px;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+      transition: transform 0.1s, opacity 0.2s;
+    }
+
+    .btn-submit:hover {
+      opacity: 0.95;
+    }
+
+    .btn-submit:active {
+      transform: scale(0.99);
+    }
+
+    /* Receipt Modal / Box */
+    .receipt-box {
+      display: none;
+      background: #0d1726;
+      border: 2px solid var(--accent-gold);
+      border-radius: 12px;
+      padding: 24px;
+      margin-top: 20px;
+      text-align: center;
+      animation: fadeIn 0.4s ease;
+    }
+
+    .receipt-header {
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--accent-gold);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .receipt-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--text-main);
+      margin-bottom: 16px;
+    }
+
+    .receipt-content {
+      background: rgba(7, 13, 24, 0.8);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 16px;
+      text-align: left;
+      font-size: 14px;
+      line-height: 1.8;
+      margin-bottom: 16px;
+    }
+
+    .receipt-code {
+      font-family: monospace;
+      color: var(--accent-blue);
+      font-weight: 700;
+    }
+
+    .receipt-footer {
+      font-size: 12px;
+      color: var(--text-muted);
+    }
+
+    /* Ledger Table Section */
+    .ledger-section {
+      margin-top: 36px;
+      padding-top: 24px;
+      border-top: 1px solid var(--card-border);
+    }
+
+    .ledger-toggle {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 14px;
+      padding: 10px 0;
+    }
+
+    .ledger-content {
+      display: none;
+      margin-top: 14px;
+    }
+
+    .ledger-stats {
+      display: flex;
+      gap: 16px;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+
+    .stat-pill {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      padding: 6px 12px;
+      border-radius: 6px;
+    }
+
+    .stat-num {
+      color: var(--accent-gold);
+      font-weight: 700;
+    }
+
+    .table-wrapper {
+      overflow-x: auto;
+      max-height: 400px;
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+      text-align: left;
+    }
+
+    th {
+      background: #142236;
+      color: var(--accent-gold);
+      padding: 10px 12px;
+      position: sticky;
+      top: 0;
+      white-space: nowrap;
+    }
+
+    td {
+      padding: 8px 12px;
+      border-bottom: 1px solid #142236;
+      color: var(--text-main);
+      white-space: nowrap;
+    }
+
+    tr:hover {
+      background: rgba(30, 51, 82, 0.3);
+    }
+
+    .btn-export {
+      background: var(--card-border);
+      color: var(--text-main);
+      border: 1px solid var(--card-border);
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 12px;
+      cursor: pointer;
+      margin-right: 8px;
+    }
+
+    .btn-export:hover {
+      background: #27436b;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <!-- Header -->
+  <div class="header">
+    <div class="eyebrow">逢甲大學通識跨域旗艦講堂 ‧ 水水臺灣</div>
+    <h1 class="main-title">國家水資源緊急應變會議<br>分組戰略榮譽獎勵登記系統</h1>
+    <div class="sub-title">請輸入學號驗證身分，確認所屬組別名次與特權登記</div>
+  </div>
+
+  <!-- Official Ground Truth Ranking Banner -->
+  <div class="ranking-banner">
+    <div class="ranking-banner-title">
+      <span>大會 50/50 雙軌正式裁定榜單</span>
+      <span style="font-size: 11px; color: var(--text-muted);">第06講白板攻防決選結果</span>
+    </div>
+    <div class="ranking-grid">
+      <div class="rank-pill pill-champion">
+        <span>冠軍 ‧ 第 3 組 顧民生組</span>
+        <strong>特權三選一</strong>
+      </div>
+      <div class="rank-pill pill-runnerup">
+        <span>亞軍 ‧ 第 1 組 保產業組</span>
+        <strong>固定加 3 分</strong>
+      </div>
+      <div class="rank-pill pill-third">
+        <span>季軍 ‧ 第 2 組 保農業組</span>
+        <strong>固定加 2 分</strong>
+      </div>
+      <div class="rank-pill pill-third">
+        <span>季軍 ‧ 第 4 組 顧生態組</span>
+        <strong>固定加 2 分</strong>
+      </div>
+    </div>
+  </div>
+
+  <!-- Step 1: Search -->
+  <div class="card">
+    <div class="card-title">步驟一：身分驗證與資格查核</div>
+    <div class="input-group">
+      <input type="text" id="studentIdInput" class="input-box" placeholder="請輸入學號 (例如 D1442251)" onkeypress="handleKeyPress(event)">
+      <button class="btn-search" onclick="searchStudent()">查核身分</button>
+    </div>
+    <div class="sub-title" style="font-size: 12px; margin-bottom: 6px;">各組幹部代表快速查驗：</div>
+    <div class="quick-list">
+      <span class="quick-tag" onclick="quickSelect('D1442251')">莊敏瑄 (第3組 冠軍)</span>
+      <span class="quick-tag" onclick="quickSelect('D1490791')">李佾恩 (第3組 冠軍)</span>
+      <span class="quick-tag" onclick="quickSelect('D1466534')">黃翌 (第1組 亞軍)</span>
+      <span class="quick-tag" onclick="quickSelect('D1485998')">黃郁淳 (第2組 季軍)</span>
+      <span class="quick-tag" onclick="quickSelect('D1582609')">王邑安 (第4組 季軍)</span>
+    </div>
+  </div>
+
+  <!-- Step 2: Student Profile Badge -->
+  <div class="student-badge" id="studentBadge">
+    <div class="badge-header">
+      <div>
+        <span class="badge-name" id="badgeName">--</span>
+        <span class="badge-id" id="badgeId">--</span>
+      </div>
+      <span class="rank-tag" id="badgeRankTag">--</span>
+    </div>
+    <div class="badge-grid">
+      <div><span class="badge-field">所屬組別：</span><span class="badge-val" id="badgeGroup">--</span></div>
+      <div><span class="badge-field">次級角色：</span><span class="badge-val" id="badgeSubgroup">--</span></div>
+      <div><span class="badge-field">組內身分：</span><span class="badge-val" id="badgeRole">--</span></div>
+      <div><span class="badge-field">特別註記：</span><span class="badge-val" id="badgeRemark">無</span></div>
+    </div>
+  </div>
+
+  <!-- Step 3: Reward Form Area -->
+  <div class="card" id="rewardSection" style="display: none;">
+    <div class="card-title" id="rewardSectionTitle">步驟二：專屬榮譽確認與登記</div>
+
+    <!-- Mode A: Champion (Rank 1 - Group 3 顧民生組) Selection -->
+    <div id="championOptionsArea" style="display: none;">
+      <div class="sub-title" style="margin-bottom: 12px;">
+        恭喜榮獲本場戰略會議「冠軍組」最高榮譽！全組享有「傳說級特權三選一」，請選定您個人的專屬福利：
+      </div>
+      <div class="reward-options">
+        <!-- Option A -->
+        <div class="opt-card" id="optA" onclick="selectReward('A')">
+          <div class="opt-title">
+            <span>選項 A ‧ 免出席一次特權</span>
+            <span style="font-size: 13px;">[自主研究日]</span>
+          </div>
+          <div class="opt-desc">
+            可指定一週課堂請假一次，授課教師不記曠課，直接核定為自主研究出勤。
+          </div>
+          <div class="opt-extra" id="optAExtra" onclick="event.stopPropagation()">
+            <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">預計請假日期 / 週次 (選填)：</label>
+            <input type="text" id="optADate" placeholder="例如：第12週 或 11/25">
+          </div>
+        </div>
+
+        <!-- Option B -->
+        <div class="opt-card" id="optB" onclick="selectReward('B')">
+          <div class="opt-title">
+            <span>選項 B ‧ 免交作業一次特權</span>
+            <span style="font-size: 13px;">[滿分登錄]</span>
+          </div>
+          <div class="opt-desc">
+            可指定一次課堂作業免予繳交，由授課教師直接核定給予滿分高分成績。
+          </div>
+          <div class="opt-extra" id="optBExtra" onclick="event.stopPropagation()">
+            <label style="font-size: 12px; color: var(--text-muted); display: block; margin-bottom: 4px;">指定折抵之作業：</label>
+            <select id="optBTarget">
+              <option value="HW03_14天微型創業">HW03 ‧ 14天低成本微型創業測試</option>
+              <option value="HW02_人機協作對策初擬">HW02 ‧ 人機協作對策初擬 (補滿分)</option>
+              <option value="HW01_個人水足跡計算">HW01 ‧ 個人水足跡計算 (補滿分)</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Option C -->
+        <div class="opt-card" id="optC" onclick="selectReward('C')">
+          <div class="opt-title">
+            <span>選項 C ‧ 學期總評大加分</span>
+            <span style="font-size: 13px;">[直接加 5 分]</span>
+          </div>
+          <div class="opt-desc">
+            學期平時成績直接加 5 分，由授課教師於期末結算時全額登錄入帳。
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mode B: Runner-up (Rank 2 - Group 1 保產業組) Fixed Reward -->
+    <div id="runnerUpArea" style="display: none;">
+      <div class="fixed-notice">
+        <div class="sub-title">保產業組戰略攻防精湛，全體組員榮獲平時成績直接加分：</div>
+        <div class="fixed-points">+ 3 分</div>
+        <div class="sub-title" style="font-size: 13px;">學期平時成績全額入帳加 3 分，點擊下方按鈕確認完成登錄存檔。</div>
+      </div>
+    </div>
+
+    <!-- Mode C: 3rd Place (Rank 3 - Group 2 保農業組 & Group 4 顧生態組) Fixed Reward -->
+    <div id="thirdPlaceArea" style="display: none;">
+      <div class="fixed-notice">
+        <div class="sub-title">全員表現卓越並列季軍，全體組員榮獲平時成績直接加分：</div>
+        <div class="fixed-points">+ 2 分</div>
+        <div class="sub-title" style="font-size: 13px;">學期平時成績全額入帳加 2 分，點擊下方按鈕確認完成登錄存檔。</div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <button class="btn-submit" id="btnSubmit" onclick="submitRegistration()">確認登記並領取電子憑證</button>
+  </div>
+
+  <!-- Receipt / Confirmation Box -->
+  <div class="receipt-box" id="receiptBox">
+    <div class="receipt-header">OFFICIAL AUDIT RECEIPT</div>
+    <div class="receipt-title">逢甲大學《水水臺灣》特權登記收執聯</div>
+    <div class="receipt-content" id="receiptContent">
+      <!-- Injected by JS -->
+    </div>
+    <div class="receipt-footer">
+      本收執聯已由系統同步寫入本地總帳本，請截圖本畫面妥善留存作為期末成績查驗依據。
+    </div>
+  </div>
+
+  <!-- Ledger & Export Section (Teacher / TA View) -->
+  <div class="ledger-section">
+    <div class="ledger-toggle" onclick="toggleLedger()">
+      <span>[展開登記總表與管理後台]</span>
+      <span id="ledgerToggleIcon">▼</span>
+    </div>
+    <div class="ledger-content" id="ledgerContent">
+      <div class="ledger-stats">
+        <div class="stat-pill">應登記：<span class="stat-num" id="statTotal">49</span> 人</div>
+        <div class="stat-pill">已登記：<span class="stat-num" id="statSubmitted">0</span> 人</div>
+        <div class="stat-pill">未登記：<span class="stat-num" id="statPending">49</span> 人</div>
+      </div>
+      <div style="margin-bottom: 12px;">
+        <button class="btn-export" onclick="exportCSV()">匯出登記名冊 (CSV)</button>
+        <button class="btn-export" onclick="exportJSON()">匯出 JSON 帳本</button>
+        <button class="btn-export" onclick="clearAllData()" style="color: var(--danger);">清除所有登記紀錄</button>
+      </div>
+      <div class="table-wrapper">
+        <table id="ledgerTable">
+          <thead>
+            <tr>
+              <th>學號</th>
+              <th>姓名</th>
+              <th>組別</th>
+              <th>名次階位</th>
+              <th>所選特權 / 加分</th>
+              <th>備註細節</th>
+              <th>登記時間</th>
+            </tr>
+          </thead>
+          <tbody id="ledgerTableBody">
+            <!-- Injected by JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Complete student roster (49 students)
+  const STUDENTS = [{"id": "D1466534", "name": "黃翌", "group_num": 1, "group_name": "保產業組", "subgroup": "政府組", "role": "分組長", "remark": ""}, {"id": "D1463024", "name": "盧思妍", "group_num": 1, "group_name": "保產業組", "subgroup": "政府組", "role": "幕僚長", "remark": ""}, {"id": "D1548294", "name": "鄭浩謙", "group_num": 1, "group_name": "保產業組", "subgroup": "政府組", "role": "分組員", "remark": ""}, {"id": "D1580801", "name": "盧柏均", "group_num": 1, "group_name": "保產業組", "subgroup": "政府組", "role": "分組員", "remark": ""}, {"id": "D1473431", "name": "何秉鴻", "group_num": 1, "group_name": "保產業組", "subgroup": "政府組", "role": "分組員", "remark": "上台"}, {"id": "D1386793", "name": "陳俊安", "group_num": 1, "group_name": "保產業組", "subgroup": "產業組", "role": "分組長", "remark": "上台"}, {"id": "D1352592", "name": "陳顥文", "group_num": 1, "group_name": "保產業組", "subgroup": "產業組", "role": "幕僚長", "remark": ""}, {"id": "D1540322", "name": "呂詰凱", "group_num": 1, "group_name": "保產業組", "subgroup": "產業組", "role": "分組員", "remark": ""}, {"id": "D1509169", "name": "洪詠智", "group_num": 1, "group_name": "保產業組", "subgroup": "產業組", "role": "分組員", "remark": ""}, {"id": "D1588578", "name": "阮沄衫", "group_num": 1, "group_name": "保產業組", "subgroup": "產業組", "role": "分組員", "remark": ""}, {"id": "D1559271", "name": "盧宥楨", "group_num": 1, "group_name": "保產業組", "subgroup": "產業組", "role": "分組員", "remark": ""}, {"id": "D1517454", "name": "李銘城", "group_num": 1, "group_name": "保產業組", "subgroup": "民眾(團體)組", "role": "分組長", "remark": ""}, {"id": "D1419395", "name": "林彤恩", "group_num": 1, "group_name": "保產業組", "subgroup": "民眾(團體)組", "role": "幕僚長", "remark": ""}, {"id": "D1580713", "name": "張育涵", "group_num": 1, "group_name": "保產業組", "subgroup": "民眾(團體)組", "role": "分組員", "remark": ""}, {"id": "D1419424", "name": "李安喬", "group_num": 1, "group_name": "保產業組", "subgroup": "民眾(團體)組", "role": "分組員", "remark": ""}, {"id": "D1353461", "name": "曾子芯", "group_num": 1, "group_name": "保產業組", "subgroup": "民眾(團體)組", "role": "分組員", "remark": ""}, {"id": "D1485998", "name": "黃郁淳", "group_num": 2, "group_name": "保農業組", "subgroup": "政府組", "role": "分組長", "remark": ""}, {"id": "D1337592", "name": "洪晞寧", "group_num": 2, "group_name": "保農業組", "subgroup": "政府組", "role": "幕僚長", "remark": ""}, {"id": "D1548659", "name": "戴宇彤", "group_num": 2, "group_name": "保農業組", "subgroup": "政府組", "role": "分組員", "remark": ""}, {"id": "D1450221", "name": "林菲", "group_num": 2, "group_name": "保農業組", "subgroup": "政府組", "role": "分組員", "remark": ""}, {"id": "D1360989", "name": "徐證洋", "group_num": 2, "group_name": "保農業組", "subgroup": "產業組", "role": "分組長", "remark": "第二個報告"}, {"id": "D1548909", "name": "林承佑", "group_num": 2, "group_name": "保農業組", "subgroup": "產業組", "role": "幕僚長", "remark": ""}, {"id": "D1559875", "name": "林家宇", "group_num": 2, "group_name": "保農業組", "subgroup": "產業組", "role": "分組員", "remark": ""}, {"id": "D1253008", "name": "林融承", "group_num": 2, "group_name": "保農業組", "subgroup": "民眾(團體)組", "role": "分組長", "remark": "第一個報告"}, {"id": "D1252870", "name": "鍾承翰", "group_num": 2, "group_name": "保農業組", "subgroup": "民眾(團體)組", "role": "幕僚長", "remark": ""}, {"id": "D1585469", "name": "曾翊程", "group_num": 2, "group_name": "保農業組", "subgroup": "民眾(團體)組", "role": "分組員", "remark": ""}, {"id": "D1490791", "name": "李佾恩", "group_num": 3, "group_name": "顧民生組", "subgroup": "政府組", "role": "分組長", "remark": ""}, {"id": "D1349171", "name": "劉承紘", "group_num": 3, "group_name": "顧民生組", "subgroup": "政府組", "role": "幕僚長", "remark": ""}, {"id": "D1581256", "name": "蔡承謙", "group_num": 3, "group_name": "顧民生組", "subgroup": "政府組", "role": "分組員", "remark": ""}, {"id": "D1515465", "name": "曹承椲", "group_num": 3, "group_name": "顧民生組", "subgroup": "產業組", "role": "分組長", "remark": "第一位上台"}, {"id": "D1515553", "name": "陳宥汮", "group_num": 3, "group_name": "顧民生組", "subgroup": "產業組", "role": "幕僚長", "remark": ""}, {"id": "D1540633", "name": "謝凱文", "group_num": 3, "group_name": "顧民生組", "subgroup": "產業組", "role": "分組員", "remark": ""}, {"id": "D1442251", "name": "莊敏瑄", "group_num": 3, "group_name": "顧民生組", "subgroup": "民眾(團體)組", "role": "分組長", "remark": ""}, {"id": "D1543285", "name": "張芸瑄", "group_num": 3, "group_name": "顧民生組", "subgroup": "民眾(團體)組", "role": "幕僚長", "remark": ""}, {"id": "D1512622", "name": "謝宜真", "group_num": 3, "group_name": "顧民生組", "subgroup": "民眾(團體)組", "role": "分組員", "remark": ""}, {"id": "D1580416", "name": "何翊歆", "group_num": 3, "group_name": "顧民生組", "subgroup": "民眾(團體)組", "role": "分組員", "remark": ""}, {"id": "D1582609", "name": "王邑安", "group_num": 4, "group_name": "顧生態組", "subgroup": "政府組", "role": "分組長", "remark": ""}, {"id": "D1586324", "name": "王睿森", "group_num": 4, "group_name": "顧生態組", "subgroup": "政府組", "role": "幕僚長", "remark": ""}, {"id": "D1572308", "name": "沈宣安", "group_num": 4, "group_name": "顧生態組", "subgroup": "政府組", "role": "幕僚長", "remark": ""}, {"id": "D1587605", "name": "劉雅蓁", "group_num": 4, "group_name": "顧生態組", "subgroup": "政府組", "role": "分組員", "remark": ""}, {"id": "D1389990", "name": "江翊晨", "group_num": 4, "group_name": "顧生態組", "subgroup": "政府組", "role": "分組員", "remark": ""}, {"id": "D1320924", "name": "姚竑均", "group_num": 4, "group_name": "顧生態組", "subgroup": "產業組", "role": "分組長", "remark": ""}, {"id": "D1447821", "name": "蘇政崎", "group_num": 4, "group_name": "顧生態組", "subgroup": "產業組", "role": "幕僚長", "remark": ""}, {"id": "D1473150", "name": "林恩立", "group_num": 4, "group_name": "顧生態組", "subgroup": "產業組", "role": "分組員", "remark": ""}, {"id": "D1561351", "name": "張可薇", "group_num": 4, "group_name": "顧生態組", "subgroup": "產業組", "role": "分組員", "remark": ""}, {"id": "D1452504", "name": "陳岳廷", "group_num": 4, "group_name": "顧生態組", "subgroup": "民眾(團體)組", "role": "分組長", "remark": ""}, {"id": "D1369308", "name": "張羽彤", "group_num": 4, "group_name": "顧生態組", "subgroup": "民眾(團體)組", "role": "幕僚長", "remark": ""}, {"id": "D1345501", "name": "陳宥瑋", "group_num": 4, "group_name": "顧生態組", "subgroup": "民眾(團體)組", "role": "分組員", "remark": ""}, {"id": "D1338682", "name": "蕭家宜", "group_num": 4, "group_name": "顧生態組", "subgroup": "民眾(團體)組", "role": "分組員", "remark": ""}];
+
+  // Group ranks mapping: group_num -> rank (1, 2, 3)
+  // Ground truth verified from 逢甲大學 06_筆記_私密版:
+  // Group 3 (顧民生組): 65.7分 -> Rank 1 (冠軍)
+  // Group 1 (保產業組): 57.5分 -> Rank 2 (亞軍)
+  // Group 2 (保農業組): 40.0分 -> Rank 3 (並列季軍)
+  // Group 4 (顧生態組): 44.3分 -> Rank 3 (並列季軍)
+  const groupRanks = {
+    1: 2, // 第 1 組 保產業組 = 亞軍 (加 3 分)
+    2: 3, // 第 2 組 保農業組 = 並列季軍 (加 2 分)
+    3: 1, // 第 3 組 顧民生組 = 冠軍 (特權三選一)
+    4: 3  // 第 4 組 顧生態組 = 並列季軍 (加 2 分)
+  };
+
+  let currentStudent = null;
+  let selectedRewardChoice = null;
+
+  // LocalStorage Key
+  const STORAGE_KEY = "FCU_WATER_WISE_REWARD_LEDGER_V2";
+
+  function getLedgerData() {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return raw ? JSON.parse(raw) : {};
+  }
+
+  function saveLedgerData(data) {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+  }
+
+  function toggleLedger() {
+    const el = document.getElementById("ledgerContent");
+    const icon = document.getElementById("ledgerToggleIcon");
+    if (el.style.display === "none") {
+      el.style.display = "block";
+      icon.textContent = "▲";
+      renderLedgerTable();
+    } else {
+      el.style.display = "none";
+      icon.textContent = "▼";
+    }
+  }
+
+  function handleKeyPress(e) {
+    if (e.key === "Enter") {
+      searchStudent();
+    }
+  }
+
+  function quickSelect(id) {
+    document.getElementById("studentIdInput").value = id;
+    searchStudent();
+  }
+
+  function searchStudent() {
+    const rawId = document.getElementById("studentIdInput").value.trim().toUpperCase();
+    if (!rawId) {
+      alert("請輸入學號！");
+      return;
+    }
+
+    const student = STUDENTS.find(s => s.id.toUpperCase() === rawId);
+    if (!student) {
+      alert("查無此學號（" + rawId + "）！請確認是否輸入正確，或聯繫授課教師。");
+      return;
+    }
+
+    currentStudent = student;
+    displayStudent(student);
+  }
+
+  function displayStudent(student) {
+    const rank = groupRanks[student.group_num] || 3;
+    const rankLabels = {
+      1: "冠軍組 (特權三選一)",
+      2: "亞軍組 (加 3 分)",
+      3: "季軍組 (加 2 分)"
+    };
+
+    // Fill badge
+    document.getElementById("badgeName").textContent = student.name;
+    document.getElementById("badgeId").textContent = student.id;
+    document.getElementById("badgeGroup").textContent = "第 " + student.group_num + " 組 " + student.group_name;
+    document.getElementById("badgeSubgroup").textContent = student.subgroup;
+    document.getElementById("badgeRole").textContent = student.role;
+    document.getElementById("badgeRemark").textContent = student.remark ? student.remark : "無";
+
+    const rankTag = document.getElementById("badgeRankTag");
+    rankTag.textContent = rankLabels[rank];
+    rankTag.className = "rank-tag rank-" + rank;
+
+    document.getElementById("studentBadge").style.display = "block";
+
+    // Reward Area
+    const rewardSec = document.getElementById("rewardSection");
+    rewardSec.style.display = "block";
+
+    document.getElementById("championOptionsArea").style.display = "none";
+    document.getElementById("runnerUpArea").style.display = "none";
+    document.getElementById("thirdPlaceArea").style.display = "none";
+    document.getElementById("receiptBox").style.display = "none";
+
+    // Reset selection
+    selectedRewardChoice = null;
+    clearOptSelection();
+
+    // Check if already registered in ledger
+    const ledger = getLedgerData();
+    const existing = ledger[student.id];
+
+    if (rank === 1) {
+      document.getElementById("championOptionsArea").style.display = "block";
+      if (existing && existing.reward_choice) {
+        selectReward(existing.reward_choice);
+        if (existing.reward_choice === "A" && existing.extra_note) {
+          document.getElementById("optADate").value = existing.extra_note;
+        }
+        if (existing.reward_choice === "B" && existing.extra_note) {
+          document.getElementById("optBTarget").value = existing.extra_note;
+        }
+      }
+    } else if (rank === 2) {
+      document.getElementById("runnerUpArea").style.display = "block";
+      selectedRewardChoice = "RUNNER_UP_3PTS";
+    } else {
+      document.getElementById("thirdPlaceArea").style.display = "block";
+      selectedRewardChoice = "THIRD_PLACE_2PTS";
+    }
+
+    if (existing) {
+      showReceipt(existing);
+    }
+  }
+
+  function clearOptSelection() {
+    ["optA", "optB", "optC"].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove("selected");
+    });
+  }
+
+  function selectReward(choice) {
+    selectedRewardChoice = choice;
+    clearOptSelection();
+    if (choice === "A") document.getElementById("optA").classList.add("selected");
+    if (choice === "B") document.getElementById("optB").classList.add("selected");
+    if (choice === "C") document.getElementById("optC").classList.add("selected");
+  }
+
+  function submitRegistration() {
+    if (!currentStudent) return;
+    const rank = groupRanks[currentStudent.group_num] || 3;
+
+    let rewardTitle = "";
+    let extraNote = "";
+
+    if (rank === 1) {
+      if (!selectedRewardChoice) {
+        alert("請在三項特權中點選一項！");
+        return;
+      }
+      if (selectedRewardChoice === "A") {
+        rewardTitle = "免出席一次特權 (自主研究日)";
+        extraNote = document.getElementById("optADate").value.trim();
+      } else if (selectedRewardChoice === "B") {
+        rewardTitle = "免交作業一次特權 (滿分登錄)";
+        extraNote = document.getElementById("optBTarget").value;
+      } else if (selectedRewardChoice === "C") {
+        rewardTitle = "學期總評大加分 (平時成績直接加 5 分)";
+        extraNote = "期末結算全額入帳";
+      }
+    } else if (rank === 2) {
+      rewardTitle = "亞軍榮譽肯定 (平時成績直接加 3 分)";
+      extraNote = "全組固定加分";
+    } else {
+      rewardTitle = "季軍榮譽肯定 (平時成績直接加 2 分)";
+      extraNote = "全組固定加分";
+    }
+
+    const now = new Date();
+    const timeStr = now.getFullYear() + "-" +
+      String(now.getMonth() + 1).padStart(2, "0") + "-" +
+      String(now.getDate()).padStart(2, "0") + " " +
+      String(now.getHours()).padStart(2, "0") + ":" +
+      String(now.getMinutes()).padStart(2, "0") + ":" +
+      String(now.getSeconds()).padStart(2, "0");
+
+    // Generate pseudo verify code
+    const rawCode = currentStudent.id + "-" + rank + "-" + now.getTime();
+    let hash = 0;
+    for (let i = 0; i < rawCode.length; i++) {
+      hash = ((hash << 5) - hash) + rawCode.charCodeAt(i);
+      hash |= 0;
+    }
+    const verifyCode = "FCU-" + Math.abs(hash).toString(16).toUpperCase().padStart(8, "0");
+
+    const record = {
+      student_id: currentStudent.id,
+      name: currentStudent.name,
+      group_num: currentStudent.group_num,
+      group_name: currentStudent.group_name,
+      subgroup: currentStudent.subgroup,
+      role: currentStudent.role,
+      rank: rank,
+      reward_choice: selectedRewardChoice,
+      reward_title: rewardTitle,
+      extra_note: extraNote,
+      timestamp: timeStr,
+      verify_code: verifyCode
+    };
+
+    // Save
+    const ledger = getLedgerData();
+    ledger[currentStudent.id] = record;
+    saveLedgerData(ledger);
+
+    showReceipt(record);
+    renderLedgerTable();
+    alert("登記成功！電子收執聯已產生，請截圖留存。");
+  }
+
+  function showReceipt(record) {
+    const receiptBox = document.getElementById("receiptBox");
+    const content = document.getElementById("receiptContent");
+
+    const rankText = record.rank === 1 ? "冠軍" : (record.rank === 2 ? "亞軍" : "季軍");
+
+    content.innerHTML = `
+      <div><strong>學生姓名：</strong>${record.name} (${record.student_id})</div>
+      <div><strong>所屬組別：</strong>第 ${record.group_num} 組 ${record.group_name} (${record.subgroup} / ${record.role})</div>
+      <div><strong>大會名次：</strong>第 ${record.rank} 名 (${rankText})</div>
+      <div><strong>核定特權：</strong><span style="color: var(--accent-gold); font-weight: 700;">${record.reward_title}</span></div>
+      <div><strong>補充細節：</strong>${record.extra_note ? record.extra_note : "無"}</div>
+      <div><strong>登記時間：</strong>${record.timestamp}</div>
+      <div><strong>防偽驗證碼：</strong><span class="receipt-code">${record.verify_code}</span></div>
+    `;
+
+    receiptBox.style.display = "block";
+    receiptBox.scrollIntoView({ behavior: "smooth" });
+  }
+
+  function renderLedgerTable() {
+    const ledger = getLedgerData();
+    const tbody = document.getElementById("ledgerTableBody");
+    tbody.innerHTML = "";
+
+    let submittedCount = 0;
+
+    STUDENTS.forEach(s => {
+      const rank = groupRanks[s.group_num] || 3;
+      const rec = ledger[s.id];
+      const rankText = rank === 1 ? "冠軍" : (rank === 2 ? "亞軍" : "季軍");
+
+      const tr = document.createElement("tr");
+
+      if (rec) {
+        submittedCount++;
+        tr.innerHTML = `
+          <td><strong>${s.id}</strong></td>
+          <td>${s.name}</td>
+          <td>第 ${s.group_num} 組 (${s.subgroup})</td>
+          <td>第 ${rank} 名 (${rankText})</td>
+          <td style="color: var(--accent-gold); font-weight: 600;">${rec.reward_title}</td>
+          <td>${rec.extra_note || "--"}</td>
+          <td>${rec.timestamp}</td>
+        `;
+      } else {
+        tr.innerHTML = `
+          <td style="color: var(--text-muted);">${s.id}</td>
+          <td style="color: var(--text-muted);">${s.name}</td>
+          <td style="color: var(--text-muted);">第 ${s.group_num} 組 (${s.subgroup})</td>
+          <td style="color: var(--text-muted);">第 ${rank} 名 (${rankText})</td>
+          <td style="color: var(--text-muted);"><em>尚未登記</em></td>
+          <td style="color: var(--text-muted);">--</td>
+          <td style="color: var(--text-muted);">--</td>
+        `;
+      }
+      tbody.appendChild(tr);
+    });
+
+    document.getElementById("statTotal").textContent = STUDENTS.length;
+    document.getElementById("statSubmitted").textContent = submittedCount;
+    document.getElementById("statPending").textContent = STUDENTS.length - submittedCount;
+  }
+
+  function exportCSV() {
+    const ledger = getLedgerData();
+    let csv = "\uFEFF學號,姓名,組別,次級分組,組內身分,名次,核定特權,補充備註,登記時間,防偽驗證碼\n";
+
+    STUDENTS.forEach(s => {
+      const rank = groupRanks[s.group_num] || 3;
+      const rec = ledger[s.id];
+      const rankText = rank === 1 ? "冠軍" : (rank === 2 ? "亞軍" : "季軍");
+      if (rec) {
+        csv += `"${s.id}","${s.name}","第${s.group_num}組${s.group_name}","${s.subgroup}","${s.role}","${rankText}","${rec.reward_title}","${rec.extra_note || ''}","${rec.timestamp}","${rec.verify_code}"\n`;
+      } else {
+        csv += `"${s.id}","${s.name}","第${s.group_num}組${s.group_name}","${s.subgroup}","${s.role}","${rankText}","尚未登記","","",""\n`;
+      }
+    });
+
+    const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "逢甲水水臺灣_分組獎勵登記總冊_" + new Date().toISOString().slice(0, 10) + ".csv";
+    a.click();
+  }
+
+  function exportJSON() {
+    const ledger = getLedgerData();
+    const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(ledger, null, 2));
+    const a = document.createElement("a");
+    a.href = dataStr;
+    a.download = "逢甲水水臺灣_分組獎勵登記帳本_" + new Date().toISOString().slice(0, 10) + ".json";
+    a.click();
+  }
+
+  function clearAllData() {
+    if (confirm("確定要清空所有已登記的數據嗎？此動作無法復原！")) {
+      localStorage.removeItem(STORAGE_KEY);
+      renderLedgerTable();
+      alert("已清除所有登記數據！");
+    }
+  }
+
+  // Initial load
+  renderLedgerTable();
+</script>
+
+</body>
+</html>
