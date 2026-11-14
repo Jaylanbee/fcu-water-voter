@@ -573,13 +573,26 @@
       <input type="text" id="studentIdInput" class="input-box" placeholder="請輸入學號 (例如 D1442251)" onkeypress="handleKeyPress(event)">
       <button class="btn-search" onclick="searchStudent()">查核身分</button>
     </div>
-    <div class="sub-title" style="font-size: 12px; margin-bottom: 6px;">各組幹部代表快速查驗：</div>
-    <div class="quick-list">
-      <span class="quick-tag" onclick="quickSelect('D1442251')">莊敏瑄 (第3組 冠軍)</span>
-      <span class="quick-tag" onclick="quickSelect('D1490791')">李佾恩 (第3組 冠軍)</span>
-      <span class="quick-tag" onclick="quickSelect('D1466534')">黃翌 (第1組 亞軍)</span>
-      <span class="quick-tag" onclick="quickSelect('D1485998')">黃郁淳 (第2組 季軍)</span>
-      <span class="quick-tag" onclick="quickSelect('D1582609')">王邑安 (第4組 季軍)</span>
+    <div style="background: rgba(212, 175, 55, 0.08); border: 1px dashed rgba(212, 175, 55, 0.4); border-radius: 8px; padding: 12px 14px; margin-top: 14px;">
+      <div style="font-size: 13px; font-weight: 700; color: var(--accent-gold); margin-bottom: 8px; display: flex; align-items: center; justify-content: space-between;">
+        <span>🏆 第 3 組「顧民生組」冠軍全體 10 位同學極速登記通道（免輸學號，點擊名字即刻自選）：</span>
+        <span style="font-size: 11px; background: var(--accent-gold); color: #070d18; font-weight: 800; padding: 1px 6px; border-radius: 4px;">特權三選一</span>
+      </div>
+      <div class="quick-list" style="margin-bottom: 8px;">
+        <span class="quick-tag" style="border-color: var(--accent-gold); color: #f3e5ab; font-weight: 600;" onclick="quickSelect('D1490791')">李佾恩 (政府組長)</span>
+        <span class="quick-tag" style="border-color: var(--accent-gold); color: #f3e5ab; font-weight: 600;" onclick="quickSelect('D1349171')">劉承紘 (政府幕僚)</span>
+        <span class="quick-tag" style="border-color: var(--accent-gold); color: #f3e5ab; font-weight: 600;" onclick="quickSelect('D1581256')">蔡承謙 (政府組員)</span>
+        <span class="quick-tag" style="border-color: var(--accent-gold); color: #f3e5ab; font-weight: 600;" onclick="quickSelect('D1515465')">曹承椲 (產業組長)</span>
+        <span class="quick-tag" style="border-color: var(--accent-gold); color: #f3e5ab; font-weight: 600;" onclick="quickSelect('D1515553')">陳宥汮 (產業幕僚)</span>
+        <span class="quick-tag" style="border-color: var(--accent-gold); color: #f3e5ab; font-weight: 600;" onclick="quickSelect('D1540633')">謝凱文 (產業組員)</span>
+        <span class="quick-tag" style="border-color: var(--accent-gold); color: #f3e5ab; font-weight: 600;" onclick="quickSelect('D1442251')">莊敏瑄 (民眾組長)</span>
+        <span class="quick-tag" style="border-color: var(--accent-gold); color: #f3e5ab; font-weight: 600;" onclick="quickSelect('D1543285')">張芸瑄 (民眾幕僚)</span>
+        <span class="quick-tag" style="border-color: var(--accent-gold); color: #f3e5ab; font-weight: 600;" onclick="quickSelect('D1512622')">謝宜真 (民眾組員)</span>
+        <span class="quick-tag" style="border-color: var(--accent-gold); color: #f3e5ab; font-weight: 600;" onclick="quickSelect('D1580416')">何翊歆 (民眾組員)</span>
+      </div>
+      <div style="font-size: 11px; color: var(--text-muted); line-height: 1.4;">
+        ※ 註：第 1 組（亞軍加 3 分）、第 2 與第 4 組（季軍加 2 分）為全組固定加分，老師已由系統全額自動登錄生效，無須手動登記。
+      </div>
     </div>
   </div>
 
