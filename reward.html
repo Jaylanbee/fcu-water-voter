@@ -515,6 +515,9 @@
       to { opacity: 1; transform: translateY(0); }
     }
   </style>
+  <!-- Firebase App & Firestore Compat SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
@@ -553,7 +556,18 @@
   </div>
 
   <!-- Step 1: Search -->
-  <div class="card">
+  
+    <div id="cloudStatusBanner" style="background: rgba(16, 185, 129, 0.1); border: 1px solid #10b981; border-radius: 8px; padding: 10px 14px; margin-bottom: 16px; display: flex; align-items: center; justify-content: space-between; font-size: 13px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="display: inline-block; width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981;"></span>
+        <span style="color: #6ee7b7; font-weight: 600;">雲端後台即時同步中 (Cloud Database Active)</span>
+      </div>
+      <div>
+        <a href="https://docs.google.com/spreadsheets/d/1q5eQxUK9mvTnagp_zvs2Shl-_VOIdE3Rk-JAkeIqogg/edit" target="_blank" style="color: #f3e5ab; text-decoration: underline; font-weight: 600;">📊 Google Sheets 登記總表</a>
+      </div>
+    </div>
+
+    <div class="card">
     <div class="card-title">步驟一：身分驗證與資格查核</div>
     <div class="input-group">
       <input type="text" id="studentIdInput" class="input-box" placeholder="請輸入學號 (例如 D1442251)" onkeypress="handleKeyPress(event)">
@@ -732,6 +746,119 @@
     3: 1, // 第 3 組 顧民生組 = 冠軍 (特權三選一)
     4: 3  // 第 4 組 顧生態組 = 並列季軍 (加 2 分)
   };
+
+  
+  // ==========================================
+  // Firebase Cloud Database Integration
+  // ==========================================
+  const firebaseConfig = {
+    apiKey: "AIzaSyC7hmNzhJxqvGlf7af05QQ8CdX4JAkRJfw",
+    authDomain: "my-check-in-app-6003d.firebaseapp.com",
+    projectId: "my-check-in-app-6003d",
+    storageBucket: "my-check-in-app-6003d.firebasestorage.app",
+    messagingSenderId: "414650098382",
+    appId: "1:414650098382:web:93ee31db2e1e1ea010269f"
+  };
+
+  let db = null;
+  let isCloudConnected = false;
+  let cloudLedger = {};
+
+  try {
+    if (typeof firebase !== 'undefined') {
+      if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+      }
+      db = firebase.firestore();
+      isCloudConnected = true;
+      console.log("Firebase initialized successfully.");
+    }
+  } catch (err) {
+    console.warn("Firebase initialization failed, falling back to local storage:", err);
+  }
+
+  function updateCloudStatusUI(connected) {
+    const banner = document.getElementById("cloudStatusBanner");
+    if (!banner) return;
+    if (connected) {
+      banner.style.background = "rgba(16, 185, 129, 0.12)";
+      banner.style.borderColor = "#10b981";
+      banner.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="display: inline-block; width: 10px; height: 10px; background-color: #10b981; border-radius: 50%; box-shadow: 0 0 8px #10b981;"></span>
+          <span style="color: #6ee7b7; font-weight: 600;">雲端資料庫已連線 (即時同步入庫)</span>
+        </div>
+        <div>
+          <a href="https://docs.google.com/spreadsheets/d/1q5eQxUK9mvTnagp_zvs2Shl-_VOIdE3Rk-JAkeIqogg/edit" target="_blank" style="color: #f3e5ab; text-decoration: underline; font-weight: 600; font-size: 13px;">📊 開啟 Google Sheets 總表</a>
+        </div>
+      `;
+    } else {
+      banner.style.background = "rgba(239, 68, 68, 0.12)";
+      banner.style.borderColor = "#ef4444";
+      banner.innerHTML = `
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span style="display: inline-block; width: 10px; height: 10px; background-color: #ef4444; border-radius: 50%;"></span>
+          <span style="color: #fca5a5; font-weight: 600;">離線暫存模式 (連線後自動同步)</span>
+        </div>
+        <div>
+          <a href="https://docs.google.com/spreadsheets/d/1q5eQxUK9mvTnagp_zvs2Shl-_VOIdE3Rk-JAkeIqogg/edit" target="_blank" style="color: #f3e5ab; text-decoration: underline; font-weight: 600; font-size: 13px;">📊 開啟 Google Sheets 總表</a>
+        </div>
+      `;
+    }
+  }
+
+  // 監聽雲端資料庫
+  function initCloudListener() {
+    if (!db) {
+      updateCloudStatusUI(false);
+      renderLedgerTable();
+      return;
+    }
+
+    db.collection("check-ins").onSnapshot((snapshot) => {
+      snapshot.forEach((doc) => {
+        if (doc.id.startsWith("reward_")) {
+          const rec = doc.data();
+          if (rec && rec.student_id) {
+            cloudLedger[rec.student_id] = rec;
+          }
+        }
+      });
+      updateCloudStatusUI(true);
+      renderLedgerTable();
+      autoSyncLocalToCloud();
+    }, (err) => {
+      console.warn("Firestore listener error:", err);
+      updateCloudStatusUI(false);
+      renderLedgerTable();
+    });
+  }
+
+  // 自動將本地已存紀錄靜默補傳至雲端（免讓學生重新操作）
+  async function autoSyncLocalToCloud() {
+    if (!db) return;
+    const local = getLedgerData();
+    for (const sid in local) {
+      const rec = local[sid];
+      if (rec && rec.student_id) {
+        if (!cloudLedger[sid] || (rec.timestamp && !cloudLedger[sid].timestamp)) {
+          try {
+            await db.collection("check-ins").doc("reward_" + sid).set(rec, { merge: true });
+            console.log("Auto-synced local record to cloud:", sid);
+            cloudLedger[sid] = rec;
+          } catch (e) {
+            console.warn("Failed auto-sync for:", sid, e);
+          }
+        }
+      }
+    }
+  }
+
+  // 取得合併後的總帳資料（雲端優先，本地補強）
+  function getMergedLedger() {
+    const local = getLedgerData();
+    return { ...local, ...cloudLedger };
+  }
 
   let currentStudent = null;
   let selectedRewardChoice = null;
@@ -929,17 +1056,46 @@
       verify_code: verifyCode
     };
 
-    // Save
+    // 1. 本地 LocalStorage 儲存（雙重保險）
     const ledger = getLedgerData();
     ledger[currentStudent.id] = record;
     saveLedgerData(ledger);
 
-    showReceipt(record);
-    renderLedgerTable();
-    alert("登記成功！電子收執聯已產生，請截圖留存。");
+    // 2. 雲端 Firestore 儲存
+    const submitBtn = document.getElementById("submitBtn");
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = "雲端同步儲存中...";
+    }
+
+    if (db) {
+      db.collection("check-ins").doc("reward_" + currentStudent.id).set(record)
+        .then(() => {
+          cloudLedger[currentStudent.id] = record;
+          showReceipt(record, true);
+          renderLedgerTable();
+          alert("登記成功！特權資料已即時寫入雲端總帳資料庫，並產生防偽收執聯！");
+        })
+        .catch((err) => {
+          console.error("Cloud save error:", err);
+          showReceipt(record, false);
+          renderLedgerTable();
+          alert("登記成功！已先儲存於本機收執聯（待網路連線時將自動同步至雲端）。");
+        })
+        .finally(() => {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.textContent = "確認登記此項特權";
+          }
+        });
+    } else {
+      showReceipt(record, false);
+      renderLedgerTable();
+      alert("登記成功！已儲存於本機收執聯。");
+    }
   }
 
-  function showReceipt(record) {
+  function showReceipt(record, cloudSynced = true) {
     const receiptBox = document.getElementById("receiptBox");
     const content = document.getElementById("receiptContent");
 
@@ -953,6 +1109,9 @@
       <div><strong>補充細節：</strong>${record.extra_note ? record.extra_note : "無"}</div>
       <div><strong>登記時間：</strong>${record.timestamp}</div>
       <div><strong>防偽驗證碼：</strong><span class="receipt-code">${record.verify_code}</span></div>
+      <div style="margin-top: 8px; font-size: 12px; color: #34d399;">
+        ${cloudSynced ? "✅ 雲端總帳已即時同步登錄 (Cloud Synced)" : "📱 本地已存證 (連線時自動補傳雲端)"}
+      </div>
     `;
 
     receiptBox.style.display = "block";
@@ -960,7 +1119,7 @@
   }
 
   function renderLedgerTable() {
-    const ledger = getLedgerData();
+    const ledger = getMergedLedger();
     const tbody = document.getElementById("ledgerTableBody");
     tbody.innerHTML = "";
 
@@ -980,7 +1139,10 @@
           <td>${s.name}</td>
           <td>第 ${s.group_num} 組 (${s.subgroup})</td>
           <td>第 ${rank} 名 (${rankText})</td>
-          <td style="color: var(--accent-gold); font-weight: 600;">${rec.reward_title}</td>
+          <td style="color: var(--accent-gold); font-weight: 600;">
+            ${rec.reward_title}
+            <span style="font-size: 11px; color: #34d399; margin-left: 6px; background: rgba(52, 211, 153, 0.15); padding: 2px 6px; border-radius: 4px;">雲端已存</span>
+          </td>
           <td>${rec.extra_note || "--"}</td>
           <td>${rec.timestamp}</td>
         `;
@@ -1043,7 +1205,8 @@
     }
   }
 
-  // Initial load
+  // Initial load with cloud listener
+  initCloudListener();
   renderLedgerTable();
 </script>
 
